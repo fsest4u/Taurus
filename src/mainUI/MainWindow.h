@@ -34,6 +34,11 @@ private slots:
 	void on_actionExit_triggered();
 	void on_actionAbout_triggered();
 
+	void on_ResultFileButton_clicked();
+
+	void AnalyzeData();
+
+
 private:
 	/**
 	* Reads all the stored application settings like
@@ -47,10 +52,15 @@ private:
 	*/
 	void WriteSettings();
 
+	void InitUI();
+
+	void ConnectSignalsToSlots();
+
 	QString		m_LastFolderOpen;
+	QString		m_CSVFileName;
 
 
-    Ui::MainWindow *ui;
+    Ui::MainWindow *ui; 
 };
 
 #endif // MAINWINDOW_H

@@ -10,6 +10,7 @@
 
 #include <QtDebug>
 #include <QtCore/QStandardPaths>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QMessageBox>
 
@@ -24,11 +25,12 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 	, m_LastFolderOpen("")
+	, m_CSVFileName("")
 {
     ui->setupUi(this);
 
    	ReadSettings();
-
+	InitUI();
 }
 
 MainWindow::~MainWindow()
@@ -50,6 +52,7 @@ void MainWindow::ReadSettings()
 
 	// The last folder used for saving and opening files
 	m_LastFolderOpen = settings.value("lastfolderopen", QDir::homePath()).toString();
+	m_CSVFileName = settings.value("lastcsvfile", QDir::homePath()).toString();
 
 	settings.endGroup();
 
@@ -64,8 +67,25 @@ void MainWindow::WriteSettings()
 
 	// The last folders used for saving and opening files
 	settings.setValue("lastfolderopen", m_LastFolderOpen);
+	settings.setValue("lastcsvfile", m_CSVFileName);
 
 	settings.endGroup();
+}
+
+void MainWindow::InitUI()
+{
+	ui->toolBar->setVisible(false);
+	ui->statusBar->setVisible(false);
+
+	ui->actionNew->setVisible(false);
+	ui->actionOpen->setVisible(false);
+	ui->actionSave->setVisible(false);
+
+	ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Analyze"));
+
+	ConnectSignalsToSlots();
+
+	ui->ResultFilepath->setText(m_CSVFileName);
 }
 
 void MainWindow::on_actionNew_triggered()
@@ -98,4 +118,44 @@ void MainWindow::on_actionExit_triggered()
 void MainWindow::on_actionAbout_triggered()
 {
 	qDebug() << "on_actionAbout_triggered()";
+	QMessageBox::information(this
+		, tr(QCoreApplication::applicationName().toStdString().c_str())
+		, tr("%1 %2").arg(QCoreApplication::applicationName())
+					.arg(QCoreApplication::applicationVersion()));
+
+}
+
+void MainWindow::on_ResultFileButton_clicked()
+{
+	QString filepath;
+	filepath = m_CSVFileName;
+
+	// Get the filename to use
+	QString default_filter = "*";
+	QString basename = QFileInfo(ui->ResultFilepath->text()).baseName();
+	QString filename = QFileDialog::getOpenFileName(this,
+													tr("Open CSV File"),
+													m_LastFolderOpen + "/" + basename,
+													tr("CSV Files (*.csv)"),
+													&default_filter);
+
+	m_CSVFileName = filename;
+	ui->ResultFilepath->setText(filename);
+
+	if (!filename.isEmpty())
+		m_LastFolderOpen = QFileInfo(filename).absolutePath();
+}
+
+
+void MainWindow::ConnectSignalsToSlots()
+{
+
+	connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(AnalyzeData()));
+
+}
+
+void MainWindow::AnalyzeData()
+{
+	qDebug() << "AnalyzeData()";
+
 }
