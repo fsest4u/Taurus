@@ -29,6 +29,9 @@ public:
 	MgrLotto();
 	~MgrLotto();
 
+	void SetData(int start, QList<QStringList> data);
+	void ExportData();
+
 
 
 private slots:
@@ -41,6 +44,8 @@ private:
 	///////////////////////////////
 	// PRIVATE MEMBER VARIABLES
 	///////////////////////////////
+	int					m_StratRow;
+	QList<QStringList>	m_LottoData;
 
 
 	ProgressWidget* m_ProgressWidget;

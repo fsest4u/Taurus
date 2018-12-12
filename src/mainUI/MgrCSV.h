@@ -27,7 +27,6 @@ class MgrCSV : public QObject
 	Q_OBJECT
 
 public:
-
 	enum COL_TYPE {
 		COL_YEAR = 0,
 		COL_TURN,
@@ -58,8 +57,10 @@ public:
 	MgrCSV();
 	~MgrCSV();
 
-	bool ReadFile(QString filepath);
-	void WriteFile(QString filepath);
+	bool				ReadFile(QString filepath);
+	void				WriteFile(QString filepath);
+	QList<QStringList>	GetData() { return m_CSVData; };
+	int					GetStartRow();
 
 
 private slots:

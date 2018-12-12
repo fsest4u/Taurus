@@ -19,6 +19,7 @@ namespace Ui {
 }
 
 class MgrCSV;
+class MgrLotto;
 
 class MainWindow : public QMainWindow
 {
@@ -38,7 +39,7 @@ private slots:
 
 	void on_ResultFileButton_clicked();
 
-	void AnalyzeData();
+	void Analyze();
 
 
 private:
@@ -61,7 +62,13 @@ private:
 	QString		m_LastFolderOpen;
 	QString		m_CSVFileName;
 
+	int					m_StartRow;
+	QList<QStringList>	m_Data;
+
 	MgrCSV		*m_CSV;
+	MgrLotto	*m_Lotto;
+
+
 
 
     Ui::MainWindow *ui; 

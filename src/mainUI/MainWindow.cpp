@@ -15,6 +15,7 @@
 #include <QtWidgets/QMessageBox>
 
 #include "MgrCSV.h"
+#include "MgrLotto.h"
 #include "misc/SettingData.h"
 
 #include "mainwindow.h"
@@ -23,11 +24,13 @@
 static const QString SETTINGS_GROUP = "mainWindow";
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+	QMainWindow(parent),
+	ui(new Ui::MainWindow)
 	, m_LastFolderOpen("")
 	, m_CSVFileName("")
 	, m_CSV(NULL)
+	, m_Lotto(NULL)
+	, m_StartRow(0)
 {
     ui->setupUi(this);
 
@@ -43,6 +46,11 @@ MainWindow::~MainWindow()
 	if (m_CSV) {
 		delete m_CSV;
 		m_CSV = 0;
+	}
+
+	if (m_Lotto) {
+		delete m_Lotto;
+		m_Lotto = 0;
 	}
 }
 
@@ -93,6 +101,8 @@ void MainWindow::InitUI()
 	ConnectSignalsToSlots();
 
 	ui->ResultFilepath->setText(m_CSVFileName);
+
+	m_Data.clear();
 }
 
 void MainWindow::on_actionNew_triggered()
@@ -157,6 +167,8 @@ void MainWindow::on_ResultFileButton_clicked()
 		}
 
 		m_CSV->ReadFile(m_CSVFileName);
+		m_Data = m_CSV->GetData();
+		m_StartRow = m_CSV->GetStartRow();
 	}
 
 
@@ -166,12 +178,18 @@ void MainWindow::on_ResultFileButton_clicked()
 void MainWindow::ConnectSignalsToSlots()
 {
 
-	connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(AnalyzeData()));
+	connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(Analyze()));
 
 }
 
-void MainWindow::AnalyzeData()
+void MainWindow::Analyze()
 {
-	qDebug() << "AnalyzeData()";
+	qDebug() << "Analyze()";
+	if (!m_Lotto) {
+		m_Lotto = new MgrLotto();
+	}
+
+	m_Lotto->SetData(m_StartRow, m_Data);
+	m_Lotto->ExportData();
 
 }

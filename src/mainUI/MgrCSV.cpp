@@ -40,9 +40,7 @@ MgrCSV::~MgrCSV()
 
 bool MgrCSV::ReadFile(QString filepath)
 {
-	qDebug() << "[ReadFile]-----------------------------";
 	m_CSVData = QtCSV::Reader::readToList(filepath);
-	qDebug() << "[ReadFile]-----------------------------" << m_CSVData.at(CSV_START_ROW).size();
 	if (m_CSVData.at(CSV_START_ROW).size() == COL_MAX) {
 
 		for (int i = CSV_START_ROW; i < m_CSVData.size(); i++) {
@@ -68,5 +66,10 @@ void MgrCSV::WriteFile(QString filepath)
 {
 	qDebug() << "[WriteFile]-----------------------------";
 
+}
+
+int MgrCSV::GetStartRow()
+{
+	return CSV_START_ROW;
 }
 
