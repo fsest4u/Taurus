@@ -18,17 +18,45 @@ find_package(Qt5 5.4 COMPONENTS Core Network Svg WebKit WebKitWidgets Widgets Xm
 set(CMAKE_AUTOMOC ON)
 
 set( MAIN_FILES
+	taurus_constants.h
 	main.cpp
 )
 
 set( MAINUI_FILES 
 	mainUI/MainWindow.h
 	mainUI/MainWindow.cpp
+	mainUI/MgrCSV.h
+	mainUI/MgrCSV.cpp
+	mainUI/MgrLotto.h
+	mainUI/MgrLotto.cpp
 )
 
 set( MISC_FILES 
+	misc/LimitDate.h
+	misc/LimitDate.cpp
+	misc/ProgressWidget.h
+	misc/ProgressWidget.cpp
     misc/SettingData.h
     misc/SettingData.cpp
+	misc/TinyAES.h
+	misc/TinyAES.cpp
+)
+
+set( QTCSV_FILES
+	qtcsv/abstractdata.h
+	qtcsv/contentiterator.cpp
+	qtcsv/contentiterator.h
+	qtcsv/filechecker.h
+	qtcsv/qtcsv_global.h
+	qtcsv/reader.cpp
+	qtcsv/reader.h
+	qtcsv/stringdata.cpp
+	qtcsv/stringdata.h
+	qtcsv/symbols.h
+	qtcsv/variantdata.cpp
+	qtcsv/variantdata.h
+	qtcsv/writer.cpp
+	qtcsv/writer.h
 )
 
 set( UI_FILES
@@ -39,7 +67,7 @@ set( QRC_FILES
 	resFiles/resources.qrc
 )
 
-set( RAW_SOURCES ${MAIN_FILES} ${MAINUI_FILES} ${MISC_FILES})
+set( RAW_SOURCES ${MAIN_FILES} ${MAINUI_FILES} ${MISC_FILES} ${QTCSV_FILES})
 
 #########################################################
 
@@ -61,6 +89,7 @@ qt5_add_translation( QM_FILES ${TS_FILES} )
 source_group( "Form Files"        FILES ${UI_FILES} )
 source_group( "Resource Files"    FILES ${QRC_FILES} )
 source_group( "Misc"              FILES ${MISC_FILES} )
+source_group( "QtCSV"			  FILES ${QTCSV_FILES} )
 source_group( "Main UI"           FILES ${MAINUI_FILES} )
 source_group( "Main Files"        FILES ${MAIN_FILES} )
 

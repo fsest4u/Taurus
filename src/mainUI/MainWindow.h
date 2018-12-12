@@ -15,8 +15,10 @@
 #include <QMainWindow>
 
 namespace Ui {
-class MainWindow;
+	class MainWindow;
 }
+
+class MgrCSV;
 
 class MainWindow : public QMainWindow
 {
@@ -58,6 +60,8 @@ private:
 
 	QString		m_LastFolderOpen;
 	QString		m_CSVFileName;
+
+	MgrCSV		*m_CSV;
 
 
     Ui::MainWindow *ui; 

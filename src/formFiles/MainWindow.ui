@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>401</width>
-    <height>263</height>
+    <width>488</width>
+    <height>384</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -73,8 +73,14 @@
       </item>
       <item row="0" column="2">
        <widget class="QDialogButtonBox" name="buttonBox">
+        <property name="autoFillBackground">
+         <bool>false</bool>
+        </property>
         <property name="standardButtons">
          <set>QDialogButtonBox::Ok</set>
+        </property>
+        <property name="centerButtons">
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -87,7 +93,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>401</width>
+     <width>488</width>
      <height>21</height>
     </rect>
    </property>

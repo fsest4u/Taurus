@@ -14,6 +14,7 @@
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QMessageBox>
 
+#include "MgrCSV.h"
 #include "misc/SettingData.h"
 
 #include "mainwindow.h"
@@ -26,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 	, m_LastFolderOpen("")
 	, m_CSVFileName("")
+	, m_CSV(NULL)
 {
     ui->setupUi(this);
 
@@ -37,6 +39,11 @@ MainWindow::~MainWindow()
 {
 	WriteSettings();
 	delete ui;
+
+	if (m_CSV) {
+		delete m_CSV;
+		m_CSV = 0;
+	}
 }
 
 void MainWindow::ReadSettings()
@@ -142,8 +149,17 @@ void MainWindow::on_ResultFileButton_clicked()
 	m_CSVFileName = filename;
 	ui->ResultFilepath->setText(filename);
 
-	if (!filename.isEmpty())
+	if (!filename.isEmpty()) {
 		m_LastFolderOpen = QFileInfo(filename).absolutePath();
+
+		if (!m_CSV) {
+			m_CSV = new MgrCSV();
+		}
+
+		m_CSV->ReadFile(m_CSVFileName);
+	}
+
+
 }
 
 
