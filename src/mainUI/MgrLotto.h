@@ -29,7 +29,17 @@ public:
 	MgrLotto();
 	~MgrLotto();
 
-	void SetData(int start, QList<QStringList> data);
+	void SetBonus(bool bBonus) { m_bBonus = bBonus; };
+	void SetStartRow(int startRow) { m_StartRow = startRow; }
+	void SetSourceData(QList<QStringList> srcData);
+
+	void SetStatNumber(bool bNumbera);
+	void SetStatColor(bool bColor);
+	void SetStatSection(bool bSection);
+	void SetStatPeriod(bool bPeriod);
+	void SetStatSniffling(bool bSniffling);
+	void SetStatContinue(bool bContinue);
+
 	void ExportData();
 
 
@@ -44,9 +54,17 @@ private:
 	///////////////////////////////
 	// PRIVATE MEMBER VARIABLES
 	///////////////////////////////
-	int					m_StratRow;
-	QList<QStringList>	m_LottoData;
+	int							m_StartRow;
 
+	QMap<QString, QByteArray>	m_CompactData;
+
+	bool				m_bBonus;
+	bool				m_bNumber;
+	bool				m_bColor;
+	bool				m_bSection;
+	bool				m_bPeriod;
+	bool				m_bSniffling;
+	bool				m_bContinue;
 
 	ProgressWidget* m_ProgressWidget;
 

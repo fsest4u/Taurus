@@ -120,7 +120,7 @@ void MainWindow::InitUI()
 
 	ui->dataFilepath->setText(m_CSVFileName);
 
-	m_Data.clear();
+	m_SrcData.clear();
 }
 
 void MainWindow::on_actionNew_triggered()
@@ -204,8 +204,14 @@ void MainWindow::Analyze()
 		m_CSV = new MgrCSV();
 	}
 
-	m_CSV->ReadFile(m_CSVFileName);
-	m_Data = m_CSV->GetData();
+	bool ret = m_CSV->ReadFile(m_CSVFileName);
+	if (!ret) {
+		QMessageBox::warning(this
+			, tr(QCoreApplication::applicationName().toStdString().c_str())
+			, tr("File isn't exist. Check a file."));
+		return;
+	}
+	m_SrcData = m_CSV->GetData();
 	m_StartRow = m_CSV->GetStartRow();
 
 
@@ -213,7 +219,17 @@ void MainWindow::Analyze()
 		m_Lotto = new MgrLotto();
 	}
 
-	m_Lotto->SetData(m_StartRow, m_Data);
-	m_Lotto->ExportData();
+	m_Lotto->SetBonus(ui->rbBonusOn->isChecked());
+	m_Lotto->SetStartRow(m_StartRow);
+	m_Lotto->SetSourceData(m_SrcData);
+
+	m_Lotto->SetStatNumber(ui->cbNumber->isChecked());
+	m_Lotto->SetStatColor(ui->cbColor->isChecked());
+	m_Lotto->SetStatSection(ui->cbSection->isChecked());
+	m_Lotto->SetStatPeriod(ui->cbPeriod->isChecked());
+	m_Lotto->SetStatSniffling(ui->cbSniffling->isChecked());
+	m_Lotto->SetStatContinue(ui->cbContinue->isChecked());
+
+	//m_Lotto->ExportData();
 
 }

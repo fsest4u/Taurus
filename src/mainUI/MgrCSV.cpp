@@ -9,6 +9,9 @@
 *************************************************************************/
 
 #include <QtDebug>
+#include <QtCore/QCoreApplication>
+#include <QtWidgets/QFileDialog>
+#include <QtWidgets/QMessageBox>
 
 #include "qtcsv/reader.h"
 #include "qtcsv/writer.h"
@@ -40,6 +43,9 @@ MgrCSV::~MgrCSV()
 
 bool MgrCSV::ReadFile(QString filepath)
 {
+	if (!QFileInfo(filepath).exists()) {
+		return false;
+	}
 	m_CSVData = QtCSV::Reader::readToList(filepath);
 	if (m_CSVData.at(CSV_START_ROW).size() == COL_MAX) {
 
