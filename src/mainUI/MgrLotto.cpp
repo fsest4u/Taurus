@@ -20,6 +20,7 @@ MgrLotto::MgrLotto() :
 	 m_ProgressWidget(NULL)
 {
 	m_CompactData.clear();
+	m_StatNumber.clear();
 
 	m_ProgressWidget = new ProgressWidget();
 }
@@ -36,22 +37,21 @@ MgrLotto::~MgrLotto()
 void MgrLotto::SetSourceData(QList<QStringList> srcData)
 {
 	m_CompactData.clear();
-	QByteArray byteArray;
-	byteArray.clear();
+	QList<int> lottoNums;
+	lottoNums.clear();
 
 	for (int i = m_StartRow; i < srcData.size(); i++) {
-		byteArray.clear();
-		//byteArray.append(srcData.at(i).value(MgrCSV::COL_1ST_NUM));
-		//byteArray.append(srcData.at(i).value(MgrCSV::COL_2ND_NUM));
-		//byteArray.append(srcData.at(i).value(MgrCSV::COL_3RD_NUM));
-		//byteArray.append(srcData.at(i).value(MgrCSV::COL_4TH_NUM));
-		//byteArray.append(srcData.at(i).value(MgrCSV::COL_5TH_NUM));
-		//byteArray.append(srcData.at(i).value(MgrCSV::COL_6TH_NUM));
-		//byteArray.append(srcData.at(i).value(MgrCSV::COL_BONUS_NUM));
-		byteArray.setNum(srcData.at(i).value(MgrCSV::COL_1ST_NUM).toInt());
-		byteArray.setNum(srcData.at(i).value(MgrCSV::COL_2ND_NUM).toInt());
+		lottoNums.clear();
+		lottoNums.insert(0, srcData.at(i).value(MgrCSV::COL_1ST_NUM).toInt());
+		lottoNums.insert(1, srcData.at(i).value(MgrCSV::COL_2ND_NUM).toInt());
+		lottoNums.insert(2, srcData.at(i).value(MgrCSV::COL_3RD_NUM).toInt());
+		lottoNums.insert(3, srcData.at(i).value(MgrCSV::COL_4TH_NUM).toInt());
+		lottoNums.insert(4, srcData.at(i).value(MgrCSV::COL_5TH_NUM).toInt());
+		lottoNums.insert(5, srcData.at(i).value(MgrCSV::COL_6TH_NUM).toInt());
+		if (m_bBonus) 
+			lottoNums.insert(6, srcData.at(i).value(MgrCSV::COL_BONUS_NUM).toInt());
 
-		m_CompactData.insert(srcData.at(i).value(MgrCSV::COL_TURN), byteArray);
+		m_CompactData.insert(srcData.at(i).value(MgrCSV::COL_TURN), lottoNums);
 	}
 
 }
@@ -61,26 +61,39 @@ void MgrLotto::SetStatNumber(bool bNumber)
 	qDebug() << "m_bBonus : " << m_bBonus;
 	if (!bNumber) return;
 	qDebug() << "SetStatNumber()";
+	m_StatNumber.clear();
 
-	QMapIterator<QString, QByteArray> i(m_CompactData);
-	while (i.hasNext()) {
-		i.next();
-		// for debug
-		QByteArray byteArray;
-		byteArray.clear();
-		byteArray = i.value();
-		QString key = QString("%1").arg(i.key());
-		qDebug() << "key : " << key;
+	QMapIterator<QString, QList<int>> num(m_CompactData);
+	while (num.hasNext()) {
+		num.next();
+		QList<int> lottoNums = num.value();
 
-		QByteArray::iterator i;
-		for (i = byteArray.begin(); i != byteArray.end(); ++i)
-			qDebug() << *i;
+		for (QList<int>::const_iterator iter = lottoNums.cbegin(); iter != lottoNums.constEnd(); ++iter) {
+			// update
+			if (m_StatNumber.contains(*iter)) {
+				int count = m_StatNumber.value(*iter);
+				m_StatNumber.insert(*iter, ++count);
 
+			}
+			// create
+			else {
+				m_StatNumber.insert(*iter, 1);
+			}
+		}
+	}
 
-		//for (QByteArray::const_iterator iter = byteArray.cbegin();
-		//	iter != byteArray.constEnd(); ++iter) {
+	m_StatNumberWin.clear();
+	QMapIterator<int, int> num2(m_StatNumber);
+	while (num2.hasNext()) {
+		num2.next();
+		qDebug() << "[num] key : " << num2.key() << ", value : " << num2.value();
+		m_StatNumberWin.insert(num2.value(), num2.key());
+	}
 
-		//}
+	QMapIterator<int, int> win(m_StatNumberWin);
+	while (win.hasNext()) {
+		win.next();
+		qDebug() << "[win] key : " << win.key() << ", value : " << win.value();
 	}
 
 

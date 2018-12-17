@@ -56,7 +56,9 @@ private:
 	///////////////////////////////
 	int							m_StartRow;
 
-	QMap<QString, QByteArray>	m_CompactData;
+	QMap<QString, QList<int>>	m_CompactData;
+	QMap<int, int>				m_StatNumber;		// 번호순
+	QMap<int, int>				m_StatNumberWin;	// 당첨회수순
 
 	bool				m_bBonus;
 	bool				m_bNumber;
