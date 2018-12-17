@@ -37,7 +37,7 @@ private slots:
 	void on_actionExit_triggered();
 	void on_actionAbout_triggered();
 
-	void on_ResultFileButton_clicked();
+	void on_dataButton_clicked();
 
 	void Analyze();
 

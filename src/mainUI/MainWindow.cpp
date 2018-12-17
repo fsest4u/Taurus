@@ -69,6 +69,16 @@ void MainWindow::ReadSettings()
 	m_LastFolderOpen = settings.value("lastfolderopen", QDir::homePath()).toString();
 	m_CSVFileName = settings.value("lastcsvfile", QDir::homePath()).toString();
 
+	ui->rbBonusOn->setChecked(settings.value("bbonus", false).toBool());
+	ui->rbBonusOff->setChecked(!settings.value("bbonus", false).toBool());
+	ui->cbNumber->setChecked(settings.value("bnumber", false).toBool());
+	ui->cbColor->setChecked(settings.value("bcolor", false).toBool());
+	ui->cbSection->setChecked(settings.value("bsection", false).toBool());
+	ui->cbPeriod->setChecked(settings.value("bperiod", false).toBool());
+	ui->cbSniffling->setChecked(settings.value("bsniffling", false).toBool());
+	ui->cbContinue->setChecked(settings.value("bcontinue", false).toBool());
+
+
 	settings.endGroup();
 
 }
@@ -83,6 +93,14 @@ void MainWindow::WriteSettings()
 	// The last folders used for saving and opening files
 	settings.setValue("lastfolderopen", m_LastFolderOpen);
 	settings.setValue("lastcsvfile", m_CSVFileName);
+
+	settings.setValue("bbonus", ui->rbBonusOn->isChecked());
+	settings.setValue("bnumber", ui->cbNumber->isChecked());
+	settings.setValue("bcolor", ui->cbColor->isChecked());
+	settings.setValue("bsection", ui->cbSection->isChecked());
+	settings.setValue("bperiod", ui->cbPeriod->isChecked());
+	settings.setValue("bsniffling", ui->cbSniffling->isChecked());
+	settings.setValue("bcontinue", ui->cbContinue->isChecked());
 
 	settings.endGroup();
 }
@@ -100,7 +118,7 @@ void MainWindow::InitUI()
 
 	ConnectSignalsToSlots();
 
-	ui->ResultFilepath->setText(m_CSVFileName);
+	ui->dataFilepath->setText(m_CSVFileName);
 
 	m_Data.clear();
 }
@@ -142,14 +160,14 @@ void MainWindow::on_actionAbout_triggered()
 
 }
 
-void MainWindow::on_ResultFileButton_clicked()
+void MainWindow::on_dataButton_clicked()
 {
 	QString filepath;
 	filepath = m_CSVFileName;
 
 	// Get the filename to use
 	QString default_filter = "*";
-	QString basename = QFileInfo(ui->ResultFilepath->text()).baseName();
+	QString basename = QFileInfo(ui->dataFilepath->text()).baseName();
 	QString filename = QFileDialog::getOpenFileName(this,
 													tr("Open CSV File"),
 													m_LastFolderOpen + "/" + basename,
@@ -157,21 +175,17 @@ void MainWindow::on_ResultFileButton_clicked()
 													&default_filter);
 
 	m_CSVFileName = filename;
-	ui->ResultFilepath->setText(filename);
+	ui->dataFilepath->setText(filename);
 
 	if (!filename.isEmpty()) {
 		m_LastFolderOpen = QFileInfo(filename).absolutePath();
-
-		if (!m_CSV) {
-			m_CSV = new MgrCSV();
-		}
-
-		m_CSV->ReadFile(m_CSVFileName);
-		m_Data = m_CSV->GetData();
-		m_StartRow = m_CSV->GetStartRow();
 	}
+	else {
+		QMessageBox::warning(this
+			, tr(QCoreApplication::applicationName().toStdString().c_str())
+			, tr("Please, Select a data file."));
 
-
+	}
 }
 
 
@@ -185,6 +199,16 @@ void MainWindow::ConnectSignalsToSlots()
 void MainWindow::Analyze()
 {
 	qDebug() << "Analyze()";
+
+	if (!m_CSV) {
+		m_CSV = new MgrCSV();
+	}
+
+	m_CSV->ReadFile(m_CSVFileName);
+	m_Data = m_CSV->GetData();
+	m_StartRow = m_CSV->GetStartRow();
+
+
 	if (!m_Lotto) {
 		m_Lotto = new MgrLotto();
 	}
