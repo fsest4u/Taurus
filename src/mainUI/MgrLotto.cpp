@@ -51,7 +51,7 @@ void MgrLotto::SetSourceData(QList<QStringList> srcData)
 		if (m_bBonus) 
 			lottoNums.insert(6, srcData.at(i).value(MgrCSV::COL_BONUS_NUM).toInt());
 
-		m_CompactData.insert(srcData.at(i).value(MgrCSV::COL_TURN), lottoNums);
+		m_CompactData.insert(srcData.at(i).value(MgrCSV::COL_TURN).toInt(), lottoNums);
 	}
 
 }
@@ -62,34 +62,40 @@ void MgrLotto::SetStatNumber(bool bNumber)
 	if (!bNumber) return;
 	qDebug() << "SetStatNumber()";
 	m_StatNumber.clear();
+	m_StatNumberWin.clear();
 
-	QMapIterator<QString, QList<int>> num(m_CompactData);
+	QMapIterator<int, QList<int>> num(m_CompactData);
 	while (num.hasNext()) {
 		num.next();
 		QList<int> lottoNums = num.value();
 
 		for (QList<int>::const_iterator iter = lottoNums.cbegin(); iter != lottoNums.constEnd(); ++iter) {
-			// update
-			if (m_StatNumber.contains(*iter)) {
-				int count = m_StatNumber.value(*iter);
-				m_StatNumber.insert(*iter, ++count);
+			//// update
+			//if (m_StatNumber.contains(*iter)) {
+			//	int count = m_StatNumber.value(*iter);
+			//	m_StatNumber.insert(*iter, ++count);
 
-			}
-			// create
-			else {
-				m_StatNumber.insert(*iter, 1);
-			}
+			//}
+			//// create
+			//else {
+			//	m_StatNumber.insert(*iter, 1);
+			//}
+			int count = m_StatNumber.value(*iter, 0);
+			m_StatNumber.insert(*iter, ++count);
+
 		}
 	}
 
-	m_StatNumberWin.clear();
 	QMapIterator<int, int> num2(m_StatNumber);
 	while (num2.hasNext()) {
 		num2.next();
+		// for debug
 		qDebug() << "[num] key : " << num2.key() << ", value : " << num2.value();
-		m_StatNumberWin.insert(num2.value(), num2.key());
+		m_StatNumberWin.insertMulti(num2.value(), num2.key());
 	}
 
+	// for debug
+	qDebug() << "=======================";
 	QMapIterator<int, int> win(m_StatNumberWin);
 	while (win.hasNext()) {
 		win.next();
@@ -102,6 +108,79 @@ void MgrLotto::SetStatColor(bool bColor)
 {
 	if (!bColor) return;
 	qDebug() << "SetStatColor()";
+	m_StatColor.clear();
+	m_StatColorTot.clear();
+
+	QMapIterator<int, QList<int>> num(m_CompactData);
+	while (num.hasNext()) {
+		num.next();
+		QList<int> lottoNums = num.value();
+
+		QHash<int, int> statColor;
+		statColor.clear();
+		int count = 0;
+
+		for (QList<int>::const_iterator iter = lottoNums.cbegin(); iter != lottoNums.constEnd(); ++iter) {
+			if (*iter < 11) {
+				count = statColor.value(1, 0);
+				statColor.insert(1, ++count);
+			}
+			else if (*iter < 21) {
+				count = statColor.value(10, 0);
+				statColor.insert(10, ++count);
+			}
+			else if (*iter < 31) {
+				count = statColor.value(20, 0);
+				statColor.insert(20, ++count);
+			}
+			else if (*iter < 41) {
+				count = statColor.value(30, 0);
+				statColor.insert(30, ++count);
+			}
+			else {
+				count = statColor.value(40, 0);
+				statColor.insert(40, ++count);
+			}
+		}
+
+		// 색상별
+		m_StatColor.insert(num.key(), statColor);
+		// 색상별 합계
+		int total = 0;
+		QHashIterator<int, int> colorItem(statColor);
+		while (colorItem.hasNext()) {
+			colorItem.next();
+			total = m_StatColorTot.value(colorItem.key(), 0);
+			m_StatColorTot.insert(colorItem.key(), colorItem.value() + total);
+		}
+	}
+
+	// for debug
+	QMapIterator<int, QHash<int, int>> col(m_StatColor);
+	while (col.hasNext()) {
+		col.next();
+		QHashIterator<int, int> val(col.value());
+		while (val.hasNext()) {
+			val.next();
+			qDebug() << "[col] col.key : " << col.key() << ", key : " << val.key() << ", value : " << val.value();
+		}
+	}
+	qDebug() << "=======================";
+	QHashIterator<int, int> tot(m_StatColorTot);
+	int amount = 0;
+	while (tot.hasNext()) {
+		tot.next();
+		amount += tot.value();
+		qDebug() << "[tot] key : " << tot.key() << ", value : " << tot.value();
+	}
+	qDebug() << "======================= amount : " << amount;
+	QHashIterator<int, int> tot2(m_StatColorTot);
+	while (tot2.hasNext()) {
+		tot2.next();
+		double avg = tot2.value() * 100 / amount;
+		//qDebug() << "[tot2] key : " << tot2.key() << ", value : " << tot2.value() << ", percent : " << QString("Total Amount : %L1").arg(avg, 0, 'f', 0);
+		qDebug() << "[tot2] key : " << tot2.key() << ", value : " << tot2.value() << ", percent : " << avg;
+	}
 
 }
 void MgrLotto::SetStatSection(bool bSection)

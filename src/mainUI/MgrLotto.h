@@ -54,11 +54,16 @@ private:
 	///////////////////////////////
 	// PRIVATE MEMBER VARIABLES
 	///////////////////////////////
-	int							m_StartRow;
+	int								m_StartRow;
 
-	QMap<QString, QList<int>>	m_CompactData;
-	QMap<int, int>				m_StatNumber;		// 번호순
-	QMap<int, int>				m_StatNumberWin;	// 당첨회수순
+	QMap<int, QList<int>>			m_CompactData;
+	// StatNumber
+	QMap<int, int>					m_StatNumber;		// 번호순 (번호, 회수)
+	QMap<int, int>					m_StatNumberWin;	// 당첨회수순 (회수, 번호)
+	// StatColor
+	QMap<int, QHash<int, int>>		m_StatColor;		// 색상별 (번호대역)
+	QHash<int, int>					m_StatColorTot;		// 색상별 합계
+
 
 	bool				m_bBonus;
 	bool				m_bNumber;
