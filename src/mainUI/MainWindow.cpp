@@ -219,6 +219,7 @@ void MainWindow::Analyze()
 		m_Lotto = new MgrLotto();
 	}
 
+	// todo : remove
 	m_Lotto->SetBonus(ui->rbBonusOn->isChecked());
 	m_Lotto->SetStartRow(m_StartRow);
 	m_Lotto->SetSourceData(m_SrcData);
