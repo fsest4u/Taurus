@@ -121,25 +121,25 @@ void MgrLotto::SetStatColor(bool bColor)
 		int count = 0;
 
 		for (QList<int>::const_iterator iter = lottoNums.cbegin(); iter != lottoNums.constEnd(); ++iter) {
-			if (*iter < 11) {
-				count = statColor.value(1, 0);
-				statColor.insert(1, ++count);
+			if (*iter <= UNIT_10_10) {
+				count = statColor.value(UNIT_10_1, 0);
+				statColor.insert(UNIT_10_1, ++count);
 			}
-			else if (*iter < 21) {
-				count = statColor.value(10, 0);
-				statColor.insert(10, ++count);
+			else if (*iter <= UNIT_10_20) {
+				count = statColor.value(UNIT_10_10, 0);
+				statColor.insert(UNIT_10_10, ++count);
 			}
-			else if (*iter < 31) {
-				count = statColor.value(20, 0);
-				statColor.insert(20, ++count);
+			else if (*iter <= UNIT_10_30) {
+				count = statColor.value(UNIT_10_20, 0);
+				statColor.insert(UNIT_10_20, ++count);
 			}
-			else if (*iter < 41) {
-				count = statColor.value(30, 0);
-				statColor.insert(30, ++count);
+			else if (*iter <= UNIT_10_40) {
+				count = statColor.value(UNIT_10_30, 0);
+				statColor.insert(UNIT_10_30, ++count);
 			}
 			else {
-				count = statColor.value(40, 0);
-				statColor.insert(40, ++count);
+				count = statColor.value(UNIT_10_40, 0);
+				statColor.insert(UNIT_10_40, ++count);
 			}
 		}
 
@@ -187,6 +187,59 @@ void MgrLotto::SetStatSection(bool bSection)
 {
 	if (!bSection) return;
 	qDebug() << "SetStatSection()";
+	m_StatSec10.clear();
+	int turn = 0;
+
+	QMapIterator<int, QList<int>> num(m_CompactData);
+	num.toBack();
+	while (num.hasPrevious() && turn < 10) {
+		num.previous();
+		turn++;
+		QList<int> lottoNums = num.value();
+
+		int count = 0;
+
+		for (QList<int>::const_iterator iter = lottoNums.cbegin(); iter != lottoNums.constEnd(); ++iter) {
+			if (*iter <= UNIT_10_10) {
+				count = m_StatSec10.value(UNIT_10_1, 0);
+				m_StatSec10.insert(UNIT_10_1, ++count);
+			}
+			else if (*iter <= UNIT_10_20) {
+				count = m_StatSec10.value(UNIT_10_10, 0);
+				m_StatSec10.insert(UNIT_10_10, ++count);
+			}
+			else if (*iter <= UNIT_10_30) {
+				count = m_StatSec10.value(UNIT_10_20, 0);
+				m_StatSec10.insert(UNIT_10_20, ++count);
+			}
+			else if (*iter <= UNIT_10_40) {
+				count = m_StatSec10.value(UNIT_10_30, 0);
+				m_StatSec10.insert(UNIT_10_30, ++count);
+			}
+			else {
+				count = m_StatSec10.value(UNIT_10_40, 0);
+				m_StatSec10.insert(UNIT_10_40, ++count);
+			}
+		}
+	}
+
+	// for debug
+	qDebug() << "=======================";
+	QHashIterator<int, int> tot(m_StatSec10);
+	int amount = 0;
+	while (tot.hasNext()) {
+		tot.next();
+		amount += tot.value();
+		qDebug() << "[tot] key : " << tot.key() << ", value : " << tot.value();
+	}
+	qDebug() << "======================= amount : " << amount;
+	QHashIterator<int, int> tot2(m_StatSec10);
+	while (tot2.hasNext()) {
+		tot2.next();
+		double avg = tot2.value() * 100 / amount;
+		//qDebug() << "[tot2] key : " << tot2.key() << ", value : " << tot2.value() << ", percent : " << QString("Total Amount : %L1").arg(avg, 0, 'f', 0);
+		qDebug() << "[tot2] key : " << tot2.key() << ", value : " << tot2.value() << ", percent : " << avg;
+	}
 
 }
 void MgrLotto::SetStatPeriod(bool bPeriod)

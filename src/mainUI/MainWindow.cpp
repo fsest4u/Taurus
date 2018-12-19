@@ -223,11 +223,17 @@ void MainWindow::Analyze()
 	m_Lotto->SetStartRow(m_StartRow);
 	m_Lotto->SetSourceData(m_SrcData);
 
+	// todo : is bonus, turn
 	m_Lotto->SetStatNumber(ui->cbNumber->isChecked());
+	// todo : is bonus, turn
 	m_Lotto->SetStatColor(ui->cbColor->isChecked());
+	// todo : is bonus, last week, unit5
 	m_Lotto->SetStatSection(ui->cbSection->isChecked());
+	// todo : is bonus, last week
 	m_Lotto->SetStatPeriod(ui->cbPeriod->isChecked());
+	// todo : not bonus, turn
 	m_Lotto->SetStatSniffling(ui->cbSniffling->isChecked());
+	// todo : not bonus, turn
 	m_Lotto->SetStatContinue(ui->cbContinue->isChecked());
 
 	//m_Lotto->ExportData();
