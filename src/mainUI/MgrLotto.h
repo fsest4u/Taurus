@@ -22,6 +22,17 @@ class MgrLotto : public QObject
 
 public:
 
+	enum Condition
+	{
+		CON_NUMBER = 0, 
+		CON_COLOR,
+		CON_SECTION,
+		CON_PERIOD,
+		CON_SNIFFLING,
+		CON_COUTINUE,
+		CON_MAX = 100
+	};
+
 	enum TURN_WEEK
 	{
 		TURN_WEEK_5 = 5,
@@ -60,9 +71,8 @@ public:
 	MgrLotto();
 	~MgrLotto();
 
-	void SetBonus(bool bBonus) { m_bBonus = bBonus; };
-	void SetStartRow(int startRow) { m_StartRow = startRow; }
-	void SetSourceData(QList<QStringList> srcData);
+	void SetPreference(bool bBonus = true, int start = 1, int end = 5, int lastweek = TURN_WEEK_5);
+	void GenerateInfo(QList<bool> condition, QMap<int, QList<int>> srcData);
 
 	void SetStatNumber(bool bNumbera);
 	void SetStatColor(bool bColor);
@@ -85,7 +95,6 @@ private:
 	///////////////////////////////
 	// PRIVATE MEMBER VARIABLES
 	///////////////////////////////
-	int								m_StartRow;
 
 	QMap<int, QList<int>>			m_CompactData;
 	// StatNumber
@@ -106,6 +115,10 @@ private:
 
 
 	bool				m_bBonus;
+	int					m_StartTurn;
+	int					m_EndTurn;
+	int					m_LastWeek;
+
 	bool				m_bNumber;
 	bool				m_bColor;
 	bool				m_bSection;

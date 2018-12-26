@@ -11,8 +11,13 @@
 #include <QtDebug>
 
 #include "misc/ProgressWidget.h"
-#include "MgrCSV.h"
 #include "MgrLotto.h"
+#include "StatColor.h"
+#include "StatContinue.h"
+#include "StatNumber.h"
+#include "StatPeriod.h"
+#include "StatSection.h"
+#include "StatSniffling.h"
 //#include "taurus_constants.h"
 
 
@@ -34,26 +39,40 @@ MgrLotto::~MgrLotto()
 	}
 }
 
-void MgrLotto::SetSourceData(QList<QStringList> srcData)
+void MgrLotto::SetPreference(bool bBonus, int start, int end, int lastweek)
 {
-	m_CompactData.clear();
-	QList<int> lottoNums;
-	lottoNums.clear();
+	m_bBonus = bBonus;
+	m_StartTurn = start;
+	m_EndTurn = end;
+	m_LastWeek = lastweek;
+}
 
-	for (int i = m_StartRow; i < srcData.size(); i++) {
-		lottoNums.clear();
-		lottoNums.insert(0, srcData.at(i).value(MgrCSV::COL_1ST_NUM).toInt());
-		lottoNums.insert(1, srcData.at(i).value(MgrCSV::COL_2ND_NUM).toInt());
-		lottoNums.insert(2, srcData.at(i).value(MgrCSV::COL_3RD_NUM).toInt());
-		lottoNums.insert(3, srcData.at(i).value(MgrCSV::COL_4TH_NUM).toInt());
-		lottoNums.insert(4, srcData.at(i).value(MgrCSV::COL_5TH_NUM).toInt());
-		lottoNums.insert(5, srcData.at(i).value(MgrCSV::COL_6TH_NUM).toInt());
-		if (m_bBonus) 
-			lottoNums.insert(6, srcData.at(i).value(MgrCSV::COL_BONUS_NUM).toInt());
-
-		m_CompactData.insert(srcData.at(i).value(MgrCSV::COL_TURN).toInt(), lottoNums);
+void MgrLotto::GenerateInfo(QList<bool> condition, QMap<int, QList<int>> srcData)
+{
+	if (condition.at(CON_NUMBER)) {
+		StatNumber number;
+		number.Generate(srcData);
 	}
-
+	else if (condition.at(CON_COLOR)) {
+		StatColor color;
+		color.Generate(srcData);
+	}
+	else if (condition.at(CON_SECTION)) {
+		StatSection section;
+		section.Generate(srcData);
+	}
+	else if (condition.at(CON_PERIOD)) {
+		StatPeriod period;
+		period.Generate(srcData);
+	}
+	else if (condition.at(CON_SNIFFLING)) {
+		StatSniffling sniffling;
+		sniffling.Generate(srcData);
+	}
+	else {	// CON_CONTINUE
+		StatContinue conti;
+		conti.Generate(srcData);
+	}
 }
 
 void MgrLotto::SetStatNumber(bool bNumber)
@@ -64,12 +83,12 @@ void MgrLotto::SetStatNumber(bool bNumber)
 	m_StatNumber.clear();
 	m_StatNumberWin.clear();
 
-	QMapIterator<int, QList<int>> num(m_CompactData);
-	while (num.hasNext()) {
-		num.next();
-		QList<int> lottoNums = num.value();
+	QMapIterator<int, QList<int>> iterator1(m_CompactData);
+	while (iterator1.hasNext()) {
+		iterator1.next();
+		QList<int> numData = iterator1.value();
 
-		for (QList<int>::const_iterator iter = lottoNums.cbegin(); iter != lottoNums.constEnd(); ++iter) {
+		for (QList<int>::const_iterator iter = numData.cbegin(); iter != numData.constEnd(); ++iter) {
 			//// update
 			//if (m_StatNumber.contains(*iter)) {
 			//	int count = m_StatNumber.value(*iter);
@@ -86,20 +105,20 @@ void MgrLotto::SetStatNumber(bool bNumber)
 		}
 	}
 
-	QMapIterator<int, int> num2(m_StatNumber);
-	while (num2.hasNext()) {
-		num2.next();
+	QMapIterator<int, int> iterator2(m_StatNumber);
+	while (iterator2.hasNext()) {
+		iterator2.next();
 		// for debug
-		qDebug() << "[num] key : " << num2.key() << ", value : " << num2.value();
-		m_StatNumberWin.insertMulti(num2.value(), num2.key());
+		qDebug() << "[iterator1] key : " << iterator2.key() << ", value : " << iterator2.value();
+		m_StatNumberWin.insertMulti(iterator2.value(), iterator2.key());
 	}
 
 	// for debug
 	qDebug() << "=======================";
-	QMapIterator<int, int> win(m_StatNumberWin);
-	while (win.hasNext()) {
-		win.next();
-		qDebug() << "[win] key : " << win.key() << ", value : " << win.value();
+	QMapIterator<int, int> iterator3(m_StatNumberWin);
+	while (iterator3.hasNext()) {
+		iterator3.next();
+		qDebug() << "[iterator3] key : " << iterator3.key() << ", value : " << iterator3.value();
 	}
 
 
@@ -111,16 +130,16 @@ void MgrLotto::SetStatColor(bool bColor)
 	m_StatColor.clear();
 	m_StatColorTot.clear();
 
-	QMapIterator<int, QList<int>> num(m_CompactData);
-	while (num.hasNext()) {
-		num.next();
-		QList<int> lottoNums = num.value();
+	QMapIterator<int, QList<int>> iterator1(m_CompactData);
+	while (iterator1.hasNext()) {
+		iterator1.next();
+		QList<int> numData = iterator1.value();
 
 		QHash<int, int> statColor;
 		statColor.clear();
 		int count = 0;
 
-		for (QList<int>::const_iterator iter = lottoNums.cbegin(); iter != lottoNums.constEnd(); ++iter) {
+		for (QList<int>::const_iterator iter = numData.cbegin(); iter != numData.constEnd(); ++iter) {
 			if (*iter <= UNIT_10_10) {
 				count = statColor.value(UNIT_10_1, 0);
 				statColor.insert(UNIT_10_1, ++count);
@@ -144,42 +163,42 @@ void MgrLotto::SetStatColor(bool bColor)
 		}
 
 		// 색상별
-		m_StatColor.insert(num.key(), statColor);
+		m_StatColor.insert(iterator1.key(), statColor);
 		// 색상별 합계
 		int total = 0;
-		QHashIterator<int, int> colorItem(statColor);
-		while (colorItem.hasNext()) {
-			colorItem.next();
-			total = m_StatColorTot.value(colorItem.key(), 0);
-			m_StatColorTot.insert(colorItem.key(), colorItem.value() + total);
+		QHashIterator<int, int> iterator2(statColor);
+		while (iterator2.hasNext()) {
+			iterator2.next();
+			total = m_StatColorTot.value(iterator2.key(), 0);
+			m_StatColorTot.insert(iterator2.key(), iterator2.value() + total);
 		}
 	}
 
 	// for debug
-	QMapIterator<int, QHash<int, int>> col(m_StatColor);
-	while (col.hasNext()) {
-		col.next();
-		QHashIterator<int, int> val(col.value());
+	QMapIterator<int, QHash<int, int>> iterator3(m_StatColor);
+	while (iterator3.hasNext()) {
+		iterator3.next();
+		QHashIterator<int, int> val(iterator3.value());
 		while (val.hasNext()) {
 			val.next();
-			qDebug() << "[col] col.key : " << col.key() << ", key : " << val.key() << ", value : " << val.value();
+			qDebug() << "[iterator3] iterator3.key : " << iterator3.key() << ", key : " << val.key() << ", value : " << val.value();
 		}
 	}
 	qDebug() << "=======================";
-	QHashIterator<int, int> tot(m_StatColorTot);
+	QHashIterator<int, int> iterator4(m_StatColorTot);
 	int amount = 0;
-	while (tot.hasNext()) {
-		tot.next();
-		amount += tot.value();
-		qDebug() << "[tot] key : " << tot.key() << ", value : " << tot.value();
+	while (iterator4.hasNext()) {
+		iterator4.next();
+		amount += iterator4.value();
+		qDebug() << "[iterator4] key : " << iterator4.key() << ", value : " << iterator4.value();
 	}
 	qDebug() << "======================= amount : " << amount;
-	QHashIterator<int, int> tot2(m_StatColorTot);
-	while (tot2.hasNext()) {
-		tot2.next();
-		double avg = tot2.value() * 100 / amount;
-		//qDebug() << "[tot2] key : " << tot2.key() << ", value : " << tot2.value() << ", percent : " << QString("Total Amount : %L1").arg(avg, 0, 'f', 0);
-		qDebug() << "[tot2] key : " << tot2.key() << ", value : " << tot2.value() << ", percent : " << avg;
+	QHashIterator<int, int> iterator5(m_StatColorTot);
+	while (iterator5.hasNext()) {
+		iterator5.next();
+		double avg = iterator5.value() * 100 / amount;
+		//qDebug() << "[iterator5] key : " << iterator5.key() << ", value : " << iterator5.value() << ", percent : " << QString("Total Amount : %L1").arg(avg, 0, 'f', 0);
+		qDebug() << "[iterator5] key : " << iterator5.key() << ", value : " << iterator5.value() << ", percent : " << avg;
 	}
 
 }
@@ -190,16 +209,16 @@ void MgrLotto::SetStatSection(bool bSection)
 	m_StatSec10.clear();
 	int turn = 0;
 
-	QMapIterator<int, QList<int>> num(m_CompactData);
-	num.toBack();
-	while (num.hasPrevious() && turn < TURN_WEEK_10) {
-		num.previous();
+	QMapIterator<int, QList<int>> iterator1(m_CompactData);
+	iterator1.toBack();
+	while (iterator1.hasPrevious() && turn < TURN_WEEK_10) {
+		iterator1.previous();
 		turn++;
-		QList<int> lottoNums = num.value();
+		QList<int> numData = iterator1.value();
 
 		int count = 0;
 
-		for (QList<int>::const_iterator iter = lottoNums.cbegin(); iter != lottoNums.constEnd(); ++iter) {
+		for (QList<int>::const_iterator iter = numData.cbegin(); iter != numData.constEnd(); ++iter) {
 			if (*iter <= UNIT_10_10) {
 				count = m_StatSec10.value(UNIT_10_1, 0);
 				m_StatSec10.insert(UNIT_10_1, ++count);
@@ -225,20 +244,20 @@ void MgrLotto::SetStatSection(bool bSection)
 
 	// for debug
 	qDebug() << "=======================";
-	QHashIterator<int, int> tot(m_StatSec10);
+	QHashIterator<int, int> iterator2(m_StatSec10);
 	int amount = 0;
-	while (tot.hasNext()) {
-		tot.next();
-		amount += tot.value();
-		qDebug() << "[tot] key : " << tot.key() << ", value : " << tot.value();
+	while (iterator2.hasNext()) {
+		iterator2.next();
+		amount += iterator2.value();
+		qDebug() << "[iterator2] key : " << iterator2.key() << ", value : " << iterator2.value();
 	}
 	qDebug() << "======================= amount : " << amount;
-	QHashIterator<int, int> tot2(m_StatSec10);
-	while (tot2.hasNext()) {
-		tot2.next();
-		double avg = tot2.value() * 100 / amount;
-		//qDebug() << "[tot2] key : " << tot2.key() << ", value : " << tot2.value() << ", percent : " << QString("Total Amount : %L1").arg(avg, 0, 'f', 0);
-		qDebug() << "[tot2] key : " << tot2.key() << ", value : " << tot2.value() << ", percent : " << avg;
+	QHashIterator<int, int> iterator3(m_StatSec10);
+	while (iterator3.hasNext()) {
+		iterator3.next();
+		double avg = iterator3.value() * 100 / amount;
+		//qDebug() << "[iterator3] key : " << iterator3.key() << ", value : " << iterator3.value() << ", percent : " << QString("Total Amount : %L1").arg(avg, 0, 'f', 0);
+		qDebug() << "[iterator3] key : " << iterator3.key() << ", value : " << iterator3.value() << ", percent : " << avg;
 	}
 
 }
@@ -252,28 +271,28 @@ void MgrLotto::SetStatPeriod(bool bPeriod)
 	}
 	int turn = 0;
 
-	QMapIterator<int, QList<int>> num(m_CompactData);
-	num.toBack();
-	while (num.hasPrevious() && turn < TURN_WEEK_10) {
-		num.previous();
+	QMapIterator<int, QList<int>> iterator1(m_CompactData);
+	iterator1.toBack();
+	while (iterator1.hasPrevious() && turn < TURN_WEEK_10) {
+		iterator1.previous();
 		turn++;
-		QList<int> lottoNums = num.value();
+		QList<int> numData = iterator1.value();
 
 		int count = 0;
 
-		for (QList<int>::const_iterator iter = lottoNums.cbegin(); iter != lottoNums.constEnd(); ++iter) {
+		for (QList<int>::const_iterator iter = numData.cbegin(); iter != numData.constEnd(); ++iter) {
 			m_StatPeriod.insert(*iter, false);
 		}
 	}
 
 	// for debug
 	qDebug() << "=======================";
-	QHashIterator<int, bool> period(m_StatPeriod);
+	QHashIterator<int, bool> iterator2(m_StatPeriod);
 	int amount = 0;
-	while (period.hasNext()) {
-		period.next();
-		if (period.value()) {
-			qDebug() << "[period] key : " << period.key() << ", value : " << period.value();
+	while (iterator2.hasNext()) {
+		iterator2.next();
+		if (iterator2.value()) {
+			qDebug() << "[iterator2] key : " << iterator2.key() << ", value : " << iterator2.value();
 		}
 	}
 
@@ -284,14 +303,14 @@ void MgrLotto::SetStatSniffling(bool bSniffling)
 	qDebug() << "SetStatSniffling()";
 	m_StatSniffling.clear();
 
-	QMapIterator<int, QList<int>> num(m_CompactData);
-	while (num.hasNext()) {
-		num.next();
-		QList<int> lottoNums = num.value();
+	QMapIterator<int, QList<int>> iterator1(m_CompactData);
+	while (iterator1.hasNext()) {
+		iterator1.next();
+		QList<int> numData = iterator1.value();
 
 		QMap<bool, int>  sniffling;
 		sniffling.clear();
-		for (QList<int>::const_iterator iter = lottoNums.cbegin(); iter != lottoNums.constEnd(); ++iter) {
+		for (QList<int>::const_iterator iter = numData.cbegin(); iter != numData.constEnd(); ++iter) {
 			if (*iter % 2) {
 				sniffling.insertMulti(true, *iter);// odd number
 			}
@@ -299,17 +318,17 @@ void MgrLotto::SetStatSniffling(bool bSniffling)
 				sniffling.insertMulti(false, *iter);// even number
 			}
 		}
-		m_StatSniffling.insert(num.key(), sniffling);
+		m_StatSniffling.insert(iterator1.key(), sniffling);
 	}
 
 	// for debug
-	QMapIterator<int, QMap<bool, int>> col(m_StatSniffling);
-	while (col.hasNext()) {
-		col.next();
-		QMapIterator<bool, int> val(col.value());
+	QMapIterator<int, QMap<bool, int>> iterator2(m_StatSniffling);
+	while (iterator2.hasNext()) {
+		iterator2.next();
+		QMapIterator<bool, int> val(iterator2.value());
 		while (val.hasNext()) {
 			val.next();
-			qDebug() << "[sniffling] col.key : " << col.key() << ", key : " << val.key() << ", value : " << val.value();
+			qDebug() << "[sniffling] iterator2.key : " << iterator2.key() << ", key : " << val.key() << ", value : " << val.value();
 		}
 	}
 
@@ -320,32 +339,32 @@ void MgrLotto::SetStatContinue(bool bContinue)
 	qDebug() << "SetStatContinue()";
 	m_StatContinue.clear();
 
-	QMapIterator<int, QList<int>> num(m_CompactData);
-	while (num.hasNext()) {
-		num.next();
-		QList<int> lottoNums = num.value();
+	QMapIterator<int, QList<int>> iterator1(m_CompactData);
+	while (iterator1.hasNext()) {
+		iterator1.next();
+		QList<int> numData = iterator1.value();
 		QList<int> continueNum;
 		continueNum.clear();
 
 		int previous = -1;
 
-		for (QList<int>::const_iterator iter = lottoNums.cbegin(); iter != lottoNums.constEnd(); ++iter) {
+		for (QList<int>::const_iterator iter = numData.cbegin(); iter != numData.constEnd(); ++iter) {
 			if (*iter == previous + 1) {
 				continueNum.insert(0, previous);
 				continueNum.insert(1, *iter);
-				m_StatContinue.insert(num.key(), continueNum);
+				m_StatContinue.insert(iterator1.key(), continueNum);
 			}
 			previous = *iter;
 		}
 	}
 
 	// for debug
-	QMapIterator<int, QList<int>> col(m_StatContinue);
-	while (col.hasNext()) {
-		col.next();
-		QList<int> val(col.value());
+	QMapIterator<int, QList<int>> iterator2(m_StatContinue);
+	while (iterator2.hasNext()) {
+		iterator2.next();
+		QList<int> val(iterator2.value());
 		//for (int i = 0; i< val.count(); i++) {
-			qDebug() << "[continue] col.key : " << col.key() << ", key : " << val.at(0) << ", value : " << val.at(1);
+			qDebug() << "[continue] iterator2.key : " << iterator2.key() << ", key : " << val.at(0) << ", value : " << val.at(1);
 		//}
 	}
 

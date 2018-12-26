@@ -57,10 +57,9 @@ public:
 	MgrCSV();
 	~MgrCSV();
 
-	bool				ReadFile(QString filepath);
-	void				WriteFile(QString filepath);
-	QList<QStringList>	GetData() { return m_CSVData; };
-	int					GetStartRow();
+	bool					ReadFile(QString filepath, bool bBonus);
+	void					WriteFile(QString filepath);
+	QMap<int, QList<int>>	GetSrcData() { return m_SrcData; };
 
 
 private slots:
@@ -73,9 +72,8 @@ private:
 	///////////////////////////////
 	// PRIVATE MEMBER VARIABLES
 	///////////////////////////////
-	QList<QStringList> m_CSVData;
 
-	QStringList		m_CSVHeader;
+	QMap<int, QList<int>>	m_SrcData;
 
 	ProgressWidget* m_ProgressWidget;
 

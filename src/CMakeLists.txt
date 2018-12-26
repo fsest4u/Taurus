@@ -29,6 +29,18 @@ set( MAINUI_FILES
 	mainUI/MgrCSV.cpp
 	mainUI/MgrLotto.h
 	mainUI/MgrLotto.cpp
+	mainUI/StatColor.h
+	mainUI/StatColor.cpp
+	mainUI/StatContinue.h
+	mainUI/StatContinue.cpp
+	mainUI/StatNumber.h
+	mainUI/StatNumber.cpp
+	mainUI/StatPeriod.h
+	mainUI/StatPeriod.cpp
+	mainUI/StatSection.h
+	mainUI/StatSection.cpp
+	mainUI/StatSniffling.h
+	mainUI/StatSniffling.cpp
 )
 
 set( MISC_FILES 

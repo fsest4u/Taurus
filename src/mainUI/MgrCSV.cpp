@@ -26,9 +26,6 @@ const int CSV_START_ROW = 3;
 MgrCSV::MgrCSV() :
 	 m_ProgressWidget(NULL)
 {
-	m_CSVData.clear();
-	m_CSVHeader << "";
-
 	m_ProgressWidget = new ProgressWidget();
 }
 
@@ -41,27 +38,31 @@ MgrCSV::~MgrCSV()
 	}
 }
 
-bool MgrCSV::ReadFile(QString filepath)
+bool MgrCSV::ReadFile(QString filepath, bool bBonus)
 {
 	if (!QFileInfo(filepath).exists()) {
 		return false;
 	}
-	m_CSVData = QtCSV::Reader::readToList(filepath);
-	if (m_CSVData.at(CSV_START_ROW).size() == COL_MAX) {
+	QList<QStringList> readData = QtCSV::Reader::readToList(filepath);
+	if (readData.at(CSV_START_ROW).size() == COL_MAX) {
 
-		for (int i = CSV_START_ROW; i < m_CSVData.size(); i++) {
-			//for (int j = 0; j < m_CSVData.at(i).size(); j++) {
-			//	qDebug() << "[" << i << ", " << j << "]" << m_CSVData.at(i).value(j);
-			//}
-			qDebug() << "[" << m_CSVData.at(i).value(COL_TURN) <<"] "
-				<< m_CSVData.at(i).value(COL_1ST_NUM) << ", "
-				<< m_CSVData.at(i).value(COL_2ND_NUM) << ", "
-				<< m_CSVData.at(i).value(COL_3RD_NUM) << ", "
-				<< m_CSVData.at(i).value(COL_4TH_NUM) << ", "
-				<< m_CSVData.at(i).value(COL_5TH_NUM) << ", "
-				<< m_CSVData.at(i).value(COL_6TH_NUM) << ", "
-				<< m_CSVData.at(i).value(COL_BONUS_NUM) << ".! ";
+		m_SrcData.clear();
+		QList<int> numData;
+
+		for (int i = CSV_START_ROW; i < readData.size(); i++) {
+			numData.clear();
+			numData.insert(0, readData.at(i).value(MgrCSV::COL_1ST_NUM).toInt());
+			numData.insert(1, readData.at(i).value(MgrCSV::COL_2ND_NUM).toInt());
+			numData.insert(2, readData.at(i).value(MgrCSV::COL_3RD_NUM).toInt());
+			numData.insert(3, readData.at(i).value(MgrCSV::COL_4TH_NUM).toInt());
+			numData.insert(4, readData.at(i).value(MgrCSV::COL_5TH_NUM).toInt());
+			numData.insert(5, readData.at(i).value(MgrCSV::COL_6TH_NUM).toInt());
+			if (bBonus)
+				numData.insert(6, readData.at(i).value(MgrCSV::COL_BONUS_NUM).toInt());
+
+			m_SrcData.insert(readData.at(i).value(MgrCSV::COL_TURN).toInt(), numData);
 		}
+
 		return true;
 	}
 
@@ -73,9 +74,3 @@ void MgrCSV::WriteFile(QString filepath)
 	qDebug() << "[WriteFile]-----------------------------";
 
 }
-
-int MgrCSV::GetStartRow()
-{
-	return CSV_START_ROW;
-}
-

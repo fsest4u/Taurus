@@ -62,9 +62,6 @@ private:
 	QString		m_LastFolderOpen;
 	QString		m_CSVFileName;
 
-	int					m_StartRow;
-	QList<QStringList>	m_SrcData;
-
 	MgrCSV		*m_CSV;
 	MgrLotto	*m_Lotto;
 

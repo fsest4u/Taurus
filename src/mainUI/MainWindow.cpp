@@ -30,7 +30,6 @@ MainWindow::MainWindow(QWidget *parent) :
 	, m_CSVFileName("")
 	, m_CSV(NULL)
 	, m_Lotto(NULL)
-	, m_StartRow(0)
 {
     ui->setupUi(this);
 
@@ -119,8 +118,6 @@ void MainWindow::InitUI()
 	ConnectSignalsToSlots();
 
 	ui->dataFilepath->setText(m_CSVFileName);
-
-	m_SrcData.clear();
 }
 
 void MainWindow::on_actionNew_triggered()
@@ -204,39 +201,26 @@ void MainWindow::Analyze()
 		m_CSV = new MgrCSV();
 	}
 
-	bool ret = m_CSV->ReadFile(m_CSVFileName);
+	bool ret = m_CSV->ReadFile(m_CSVFileName, ui->rbBonusOn->isChecked());
 	if (!ret) {
 		QMessageBox::warning(this
 			, tr(QCoreApplication::applicationName().toStdString().c_str())
 			, tr("File isn't exist. Check a file."));
 		return;
 	}
-	m_SrcData = m_CSV->GetData();
-	m_StartRow = m_CSV->GetStartRow();
-
-
+	
 	if (!m_Lotto) {
 		m_Lotto = new MgrLotto();
 	}
 
-	// todo : remove
-	m_Lotto->SetBonus(ui->rbBonusOn->isChecked());
-	m_Lotto->SetStartRow(m_StartRow);
-	m_Lotto->SetSourceData(m_SrcData);
+	m_Lotto->SetPreference(ui->rbBonusOn->isChecked());
 
-	// todo : is bonus, turn
-	m_Lotto->SetStatNumber(ui->cbNumber->isChecked());
-	// todo : is bonus, turn
-	m_Lotto->SetStatColor(ui->cbColor->isChecked());
-	// todo : is bonus, last week, unit5
-	m_Lotto->SetStatSection(ui->cbSection->isChecked());
-	// todo : is bonus, last week
-	m_Lotto->SetStatPeriod(ui->cbPeriod->isChecked());
-	// todo : not bonus, turn
-	m_Lotto->SetStatSniffling(ui->cbSniffling->isChecked());
-	// todo : not bonus, turn
-	m_Lotto->SetStatContinue(ui->cbContinue->isChecked());
-
-	//m_Lotto->ExportData();
-
+	QList<bool> condition;
+	condition.insert(0, ui->cbNumber->isChecked());
+	condition.insert(1, ui->cbColor->isChecked());
+	condition.insert(2, ui->cbSection->isChecked());
+	condition.insert(3, ui->cbPeriod->isChecked());
+	condition.insert(4, ui->cbSniffling->isChecked());
+	condition.insert(5, ui->cbContinue->isChecked());
+	m_Lotto->GenerateInfo(condition, m_CSV->GetSrcData());
 }
