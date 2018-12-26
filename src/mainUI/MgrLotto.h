@@ -101,6 +101,8 @@ private:
 	QHash<int, bool>				m_StatPeriod;		// 기간별 미출현 번호
 	// StatSniffling
 	QMap<int, QMap<bool, int>>		m_StatSniffling;	// 홀짝 
+	// StatContinue
+	QMap<int, QList<int>>			m_StatContinue;		// 연속번호
 
 
 	bool				m_bBonus;

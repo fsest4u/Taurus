@@ -1,4 +1,4 @@
-/************************************************************************
+ï»¿/************************************************************************
 **
 **  Copyright (C) 2018  Daniel Lee <fsest4u@gmail.com>
 **
@@ -143,9 +143,9 @@ void MgrLotto::SetStatColor(bool bColor)
 			}
 		}
 
-		// »ö»óº°
+		// ìƒ‰ìƒë³„
 		m_StatColor.insert(num.key(), statColor);
-		// »ö»óº° ÇÕ°è
+		// ìƒ‰ìƒë³„ í•©ê³„
 		int total = 0;
 		QHashIterator<int, int> colorItem(statColor);
 		while (colorItem.hasNext()) {
@@ -318,6 +318,36 @@ void MgrLotto::SetStatContinue(bool bContinue)
 {
 	if (!bContinue) return;
 	qDebug() << "SetStatContinue()";
+	m_StatContinue.clear();
+
+	QMapIterator<int, QList<int>> num(m_CompactData);
+	while (num.hasNext()) {
+		num.next();
+		QList<int> lottoNums = num.value();
+		QList<int> continueNum;
+		continueNum.clear();
+
+		int previous = -1;
+
+		for (QList<int>::const_iterator iter = lottoNums.cbegin(); iter != lottoNums.constEnd(); ++iter) {
+			if (*iter == previous + 1) {
+				continueNum.insert(0, previous);
+				continueNum.insert(1, *iter);
+				m_StatContinue.insert(num.key(), continueNum);
+			}
+			previous = *iter;
+		}
+	}
+
+	// for debug
+	QMapIterator<int, QList<int>> col(m_StatContinue);
+	while (col.hasNext()) {
+		col.next();
+		QList<int> val(col.value());
+		//for (int i = 0; i< val.count(); i++) {
+			qDebug() << "[continue] col.key : " << col.key() << ", key : " << val.at(0) << ", value : " << val.at(1);
+		//}
+	}
 
 }
 
