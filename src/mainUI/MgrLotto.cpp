@@ -282,6 +282,36 @@ void MgrLotto::SetStatSniffling(bool bSniffling)
 {
 	if (!bSniffling) return;
 	qDebug() << "SetStatSniffling()";
+	m_StatSniffling.clear();
+
+	QMapIterator<int, QList<int>> num(m_CompactData);
+	while (num.hasNext()) {
+		num.next();
+		QList<int> lottoNums = num.value();
+
+		QMap<bool, int>  sniffling;
+		sniffling.clear();
+		for (QList<int>::const_iterator iter = lottoNums.cbegin(); iter != lottoNums.constEnd(); ++iter) {
+			if (*iter % 2) {
+				sniffling.insertMulti(true, *iter);// odd number
+			}
+			else {
+				sniffling.insertMulti(false, *iter);// even number
+			}
+		}
+		m_StatSniffling.insert(num.key(), sniffling);
+	}
+
+	// for debug
+	QMapIterator<int, QMap<bool, int>> col(m_StatSniffling);
+	while (col.hasNext()) {
+		col.next();
+		QMapIterator<bool, int> val(col.value());
+		while (val.hasNext()) {
+			val.next();
+			qDebug() << "[sniffling] col.key : " << col.key() << ", key : " << val.key() << ", value : " << val.value();
+		}
+	}
 
 }
 void MgrLotto::SetStatContinue(bool bContinue)
