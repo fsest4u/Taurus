@@ -192,7 +192,7 @@ void MgrLotto::SetStatSection(bool bSection)
 
 	QMapIterator<int, QList<int>> num(m_CompactData);
 	num.toBack();
-	while (num.hasPrevious() && turn < 10) {
+	while (num.hasPrevious() && turn < TURN_WEEK_10) {
 		num.previous();
 		turn++;
 		QList<int> lottoNums = num.value();
@@ -246,6 +246,36 @@ void MgrLotto::SetStatPeriod(bool bPeriod)
 {
 	if (!bPeriod) return;
 	qDebug() << "SetStatPeriod()";
+	m_StatPeriod.clear();
+	for (int i = 1; i < (45+1); i++) {
+		m_StatPeriod.insert(i, true);
+	}
+	int turn = 0;
+
+	QMapIterator<int, QList<int>> num(m_CompactData);
+	num.toBack();
+	while (num.hasPrevious() && turn < TURN_WEEK_10) {
+		num.previous();
+		turn++;
+		QList<int> lottoNums = num.value();
+
+		int count = 0;
+
+		for (QList<int>::const_iterator iter = lottoNums.cbegin(); iter != lottoNums.constEnd(); ++iter) {
+			m_StatPeriod.insert(*iter, false);
+		}
+	}
+
+	// for debug
+	qDebug() << "=======================";
+	QHashIterator<int, bool> period(m_StatPeriod);
+	int amount = 0;
+	while (period.hasNext()) {
+		period.next();
+		if (period.value()) {
+			qDebug() << "[period] key : " << period.key() << ", value : " << period.value();
+		}
+	}
 
 }
 void MgrLotto::SetStatSniffling(bool bSniffling)

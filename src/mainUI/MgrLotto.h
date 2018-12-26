@@ -1,4 +1,4 @@
-/************************************************************************
+ï»¿/************************************************************************
 **
 **  Copyright (C) 2018  Daniel Lee <fsest4u@gmail.com>
 **
@@ -21,6 +21,14 @@ class MgrLotto : public QObject
 	Q_OBJECT
 
 public:
+
+	enum TURN_WEEK
+	{
+		TURN_WEEK_5 = 5,
+		TURN_WEEK_10 = 10,
+		TURN_WEEK_15 = 15,
+		TURN_WEEK_MAX = 100
+	};
 
 	enum SectionUnit10
 	{
@@ -81,14 +89,18 @@ private:
 
 	QMap<int, QList<int>>			m_CompactData;
 	// StatNumber
-	QMap<int, int>					m_StatNumber;		// ¹øÈ£¼ø (¹øÈ£, È¸¼ö)
-	QMap<int, int>					m_StatNumberWin;	// ´çÃ·È¸¼ö¼ø (È¸¼ö, ¹øÈ£)
+	QMap<int, int>					m_StatNumber;		// ë²ˆí˜¸ìˆœ (ë²ˆí˜¸, íšŒìˆ˜)
+	QMap<int, int>					m_StatNumberWin;	// ë‹¹ì²¨íšŒìˆ˜ìˆœ (íšŒìˆ˜, ë²ˆí˜¸)
 	// StatColor
-	QMap<int, QHash<int, int>>		m_StatColor;		// »ö»óº° (¹øÈ£´ë¿ª)
-	QHash<int, int>					m_StatColorTot;		// »ö»óº° ÇÕ°è
+	QMap<int, QHash<int, int>>		m_StatColor;		// ìƒ‰ìƒë³„ (ë²ˆí˜¸ëŒ€ì—­)
+	QHash<int, int>					m_StatColorTot;		// ìƒ‰ìƒë³„ í•©ê³„
 	// StatSection
-	QHash<int, int>					m_StatSec10;		// ±¸°£º° 10´ÜÀ§
-	QHash<int, int>					m_StatSec5;			// ±¸°£º° 5´ÜÀ§
+	QHash<int, int>					m_StatSec10;		// êµ¬ê°„ë³„ 10ë‹¨ìœ„
+	QHash<int, int>					m_StatSec5;			// êµ¬ê°„ë³„ 5ë‹¨ìœ„
+	// StatPeriod
+	QHash<int, bool>				m_StatPeriod;		// ê¸°ê°„ë³„ ë¯¸ì¶œí˜„ ë²ˆí˜¸
+	// StatSniffling
+	QMap<int, QMap<bool, int>>		m_StatSniffling;	// í™€ì§ 
 
 
 	bool				m_bBonus;
