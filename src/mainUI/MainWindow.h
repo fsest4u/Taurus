@@ -39,6 +39,8 @@ private slots:
 
 	void on_dataButton_clicked();
 
+	void SetStartTurn(int index);
+	void SetEndTurn(int index);
 	void Analyze();
 
 

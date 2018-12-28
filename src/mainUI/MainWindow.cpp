@@ -121,7 +121,7 @@ void MainWindow::InitUI()
 	ui->cbLastWeek->addItem(tr("5 Week"), MgrLotto::TURN_WEEK_5);
 	ui->cbLastWeek->addItem(tr("10 Week"), MgrLotto::TURN_WEEK_10);
 	ui->cbLastWeek->addItem(tr("15 Week"), MgrLotto::TURN_WEEK_15);
-	ui->cbLastWeek->setCurrentIndex(ui->cbLastWeek->count() - 1);
+	ui->cbLastWeek->setCurrentIndex(0);
 
 }
 
@@ -212,10 +212,27 @@ void MainWindow::on_dataButton_clicked()
 
 void MainWindow::ConnectSignalsToSlots()
 {
+	connect(ui->cbStart, SIGNAL(currentIndexChanged(int)), this, SLOT(SetStartTurn(int)));
+	connect(ui->cbEnd, SIGNAL(currentIndexChanged(int)), this, SLOT(SetEndTurn(int)));
 
 	connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(Analyze()));
 
 }
+
+void MainWindow::SetStartTurn(int index)
+{
+	if (ui->cbEnd->currentIndex() < index) {
+		ui->cbEnd->setCurrentIndex(index);
+	}
+}
+
+void MainWindow::SetEndTurn(int index)
+{
+	if (ui->cbStart->currentIndex() > index) {
+		ui->cbStart->setCurrentIndex(index);
+	}
+}
+
 
 void MainWindow::Analyze()
 {
