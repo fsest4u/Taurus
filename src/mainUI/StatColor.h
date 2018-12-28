@@ -47,7 +47,8 @@ private:
 	//QMap<int, QMap<int, int>>		m_Stat1;		// 색상별 (번호대역)
 	//QMap<int, int>					m_Stat2;		// 색상별 (합계)
 
-	QMap<int, int>					m_Stat3;		// 색상별(합계)
+	QMap<int, int>					m_Stat3;		// 번호 대역순, 당첨 회수
+	QMap<int, int>					m_Stat4;		// 당첨 회수순, 번호 대역
 
 };
 

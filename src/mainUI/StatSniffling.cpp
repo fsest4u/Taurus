@@ -14,6 +14,9 @@
 #include "MgrLotto.h"
 //#include "taurus_constants.h"
 
+const int SNIFFLING_COUNT = 0;
+const int SNIFFLING_TOTAL = 1;
+
 
 StatSniffling::StatSniffling()
 {
@@ -53,6 +56,7 @@ void StatSniffling::Generate(QMap<int, QList<int>> srcData, bool bBonus, int sta
 	}
 
 	// for debug
+	m_Stat2.clear();
 	QMapIterator<int, QMap<bool, int>> iterator2(m_Stat1);
 	while (iterator2.hasNext()) {
 		iterator2.next();
@@ -69,6 +73,37 @@ void StatSniffling::Generate(QMap<int, QList<int>> srcData, bool bBonus, int sta
 			<< ", Odd : " << sniffling.values(true).count()
 			<< ", Even : " << sniffling.values(false).count()
 			<< ", Total : " << total;
+
+		QList<int> newList;
+		newList.append(0);
+		newList.append(0);
+		QList<int> oldList = m_Stat2.value(sniffling.values(true).count(), newList);
+
+		newList.clear();
+		newList.append(oldList.at(SNIFFLING_COUNT) + 1);		// 홀수 개수의 회차 개수
+		newList.append(oldList.at(SNIFFLING_TOTAL) + total);	// 숫자를 모두 더한 값
+		m_Stat2.insert(sniffling.values(true).count(), newList);
 	}
 
+	m_Stat3.clear();
+	QMapIterator<int, QList<int>> iterator3(m_Stat2);
+	while (iterator3.hasNext()) {
+		iterator3.next();
+		QList<int> oldList(iterator3.value());
+		QList<int> newList;
+		newList.append(iterator3.key());
+		qDebug() << "Total : " << oldList.at(SNIFFLING_TOTAL);
+			newList.append(oldList.at(SNIFFLING_TOTAL) / oldList.at(SNIFFLING_COUNT));
+
+		m_Stat3.insert(oldList.at(SNIFFLING_COUNT), newList);
+	}
+	QMapIterator<int, QList<int>> iterator4(m_Stat3);
+	iterator4.toBack();
+	while (iterator4.hasPrevious()) {
+		iterator4.previous();
+		qDebug() << "[StatSniffling] Win : " << iterator4.key()
+			<< ", Odd : " << iterator4.value().at(SNIFFLING_COUNT)
+			<< ", Average : " << iterator4.value().at(SNIFFLING_TOTAL);
+
+	}
 }

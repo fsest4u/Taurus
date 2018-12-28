@@ -43,7 +43,9 @@ private:
 	///////////////////////////////
 
 	// StatSniffling
-	QMap<int, QMap<bool, int>>		m_Stat1;	// 홀짝 
+	QMap<int, QMap<bool, int>>		m_Stat1;	// 회차순, 홀짝, 숫자
+	QMap<int, QList<int>>			m_Stat2;	// 홀수 개수순, 당첨 회수, 번호합
+	QMap<int, QList<int>>			m_Stat3;	// 당첨 회수순, 홀수 개수, 번호합의 평균
 
 };
 

@@ -62,10 +62,20 @@ void StatColor::Generate(QMap<int, QList<int>> srcData, bool bBonus, int start, 
 	qDebug() << "=======================";
 	int amount = m_Stat3.count();
 
-	QList<int> keys = m_Stat3.uniqueKeys();
-	for (QList<int>::const_iterator iter = keys.cbegin(); iter != keys.constEnd(); ++iter) {
-		double avg = m_Stat3.values(*iter).count() * 100 / amount;
-		qDebug() << "[StatColor] key : " << *iter << ", value : " << m_Stat3.values(*iter).count() << ", percent : " << avg;
+	QList<int> unikeys = m_Stat3.uniqueKeys();
+	for (QList<int>::const_iterator iter = unikeys.cbegin(); iter != unikeys.constEnd(); ++iter) {
+		//double avg = m_Stat3.values(*iter).count() * 100 / amount;
+		//qDebug() << "[StatColor] key : " << *iter << ", value : " << m_Stat3.values(*iter).count() << ", percent : " << avg;
+		m_Stat4.insert(m_Stat3.values(*iter).count(), *iter);
+	}
+
+	QMapIterator<int, int> iterator2(m_Stat4);
+	iterator2.toBack();
+	while (iterator2.hasPrevious()) {
+		iterator2.previous();
+
+		double avg = iterator2.key() * 100 / amount;
+		qDebug() << "[StatColor] WIn : " << iterator2.key() << ", NumberArea : " << iterator2.value() << ", percent : " << avg;
 	}
 }
 

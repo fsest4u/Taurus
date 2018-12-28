@@ -45,8 +45,12 @@ private:
 	///////////////////////////////
 
 	// StatSection
-	QMap<int, int>					m_Stat1;			// 구간별 10단위
+	//QMap<int, int>					m_Stat1;			// 구간별 10단위
 	//QMap<int, int>					m_Stat2;			// 구간별 5단위
+
+	QMap<int, int>					m_Stat3;			// 번호 대역, 당첨 회수
+	QMap<int, int>					m_Stat4;			// 당첨 회수순, 번호 대역
+
 
 };
 

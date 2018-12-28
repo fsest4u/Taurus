@@ -25,7 +25,7 @@ StatSection::~StatSection()
 void StatSection::Generate(QMap<int, QList<int>> srcData, bool bBonus, int lastweek)
 {
 	qDebug() << "StatSection::Generate()";
-	m_Stat1.clear();
+	m_Stat3.clear();
 	int turn = 0;
 
 	QMapIterator<int, QList<int>> iterator1(srcData);
@@ -39,32 +39,43 @@ void StatSection::Generate(QMap<int, QList<int>> srcData, bool bBonus, int lastw
 
 		for (QList<int>::const_iterator iter = numData.cbegin(); iter != numData.constEnd(); ++iter) {
 			if (*iter <= MgrLotto::UNIT_10_10) {
-				m_Stat1.insertMulti(MgrLotto::UNIT_10_1, 1);
+				m_Stat3.insertMulti(MgrLotto::UNIT_10_1, 1);
 			}
 			else if (*iter <= MgrLotto::UNIT_10_20) {
-				m_Stat1.insertMulti(MgrLotto::UNIT_10_10, 1);
+				m_Stat3.insertMulti(MgrLotto::UNIT_10_10, 1);
 			}
 			else if (*iter <= MgrLotto::UNIT_10_30) {
-				m_Stat1.insertMulti(MgrLotto::UNIT_10_20, 1);
+				m_Stat3.insertMulti(MgrLotto::UNIT_10_20, 1);
 			}
 			else if (*iter <= MgrLotto::UNIT_10_40) {
-				m_Stat1.insertMulti(MgrLotto::UNIT_10_30, 1);
+				m_Stat3.insertMulti(MgrLotto::UNIT_10_30, 1);
 			}
 			else {
-				m_Stat1.insertMulti(MgrLotto::UNIT_10_40, 1);
+				m_Stat3.insertMulti(MgrLotto::UNIT_10_40, 1);
 			}
 		}
 	}
 
 	// for debug
 	qDebug() << "=======================";
-	int amount = m_Stat1.count();
+	int amount = m_Stat3.count();
 
-	QList<int> keys = m_Stat1.uniqueKeys();
+	QList<int> keys = m_Stat3.uniqueKeys();
 	for (QList<int>::const_iterator iter = keys.cbegin(); iter != keys.constEnd(); ++iter) {
-		double avg = m_Stat1.values(*iter).count() * 100 / amount;
-		qDebug() << "[StatSection] key : " << *iter << ", value : " << m_Stat1.values(*iter).count() << ", percent : " << avg;
+		//double avg = m_Stat3.values(*iter).count() * 100 / amount;
+		//qDebug() << "[StatSection] key : " << *iter << ", value : " << m_Stat3.values(*iter).count() << ", percent : " << avg;
+		m_Stat4.insert(m_Stat3.values(*iter).count(), *iter);
 	}
+
+	QMapIterator<int, int> iterator2(m_Stat4);
+	iterator2.toBack();
+	while (iterator2.hasPrevious()) {
+		iterator2.previous();
+
+		double avg = iterator2.key() * 100 / amount;
+		qDebug() << "[StatSection] Win : " << iterator2.key() << ", Number Area : " << iterator2.value() << ", percent : " << avg;
+	}
+
 }
 
 //void StatSection::Generate_old(QMap<int, QList<int>> srcData, bool bBonus, int lastweek)

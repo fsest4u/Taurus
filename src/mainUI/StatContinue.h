@@ -43,7 +43,10 @@ private:
 	///////////////////////////////
 
 	// StatContinue
-	QMap<int, QList<int>>			m_Stat1;		// 연속번호
+	QMap<int, QList<int>>			m_Stat1;		// 회차, 연속번호 쌍
+	QMap<int, int>					m_Stat2;		// 연속번호 쌍, 출현 회수
+	QMap<int, int>					m_Stat3;		// 출현 회수, 연속번호 쌍
+
 
 };
 

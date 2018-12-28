@@ -59,8 +59,9 @@ void StatNumber::Generate(QMap<int, QList<int>> srcData, bool bBonus, int start,
 	// for debug
 	qDebug() << "Order Win =======================";
 	QMapIterator<int, int> iterator3(m_Stat2);
-	while (iterator3.hasNext()) {
-		iterator3.next();
+	iterator3.toBack();
+	while (iterator3.hasPrevious()) {
+		iterator3.previous();
 		qDebug() << "Win : " << iterator3.key() << ", Number : " << iterator3.value();
 	}
 

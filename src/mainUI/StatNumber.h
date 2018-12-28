@@ -43,8 +43,8 @@ private:
 	///////////////////////////////
 
 	// StatNumber
-	QMap<int, int>					m_Stat1;		// 번호순 (번호, 회수)
-	QMap<int, int>					m_Stat2;	// 당첨회수순 (회수, 번호)
+	QMap<int, int>					m_Stat1;		// 번호순, 당첨 회수
+	QMap<int, int>					m_Stat2;		// 당첨 회수순, 번호
 
 };
 

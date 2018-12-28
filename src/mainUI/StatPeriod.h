@@ -44,7 +44,7 @@ private:
 	///////////////////////////////
 
 	// StatPeriod
-	QMap<int, bool>				m_Stat1;		// 기간별 미출현 번호
+	QMap<int, bool>				m_Stat1;		// 기간별 미출현 번호, 미출현 여부
 
 };
 
