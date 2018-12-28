@@ -14,6 +14,7 @@
 
 #include <QtCore/QObject>
 
+#include "MgrLotto.h"
 
 class StatPeriod : public QObject
 {
@@ -28,7 +29,7 @@ public:
 	StatPeriod();
 	~StatPeriod();
 
-	void Generate(QMap<int, QList<int>> srcData);
+	void Generate(QMap<int, QList<int>> srcData, bool bBonus = true, int lastweek = MgrLotto::TURN_WEEK_5);
 
 
 
@@ -43,7 +44,7 @@ private:
 	///////////////////////////////
 
 	// StatPeriod
-	QHash<int, bool>				m_Stat1;		// 기간별 미출현 번호
+	QMap<int, bool>				m_Stat1;		// 기간별 미출현 번호
 
 };
 

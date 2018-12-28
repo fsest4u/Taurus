@@ -28,7 +28,7 @@ public:
 	StatSniffling();
 	~StatSniffling();
 
-	void Generate(QMap<int, QList<int>> srcData);
+	void Generate(QMap<int, QList<int>> srcData, bool bBonus = false, int start = 1, int end = 1);
 
 
 
@@ -43,7 +43,7 @@ private:
 	///////////////////////////////
 
 	// StatSniffling
-	QMap<int, QMap<bool, int>>		m_StatSniffling;	// 홀짝 
+	QMap<int, QMap<bool, int>>		m_Stat1;	// 홀짝 
 
 };
 

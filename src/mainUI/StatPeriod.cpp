@@ -11,7 +11,6 @@
 #include <QtDebug>
 
 #include "StatPeriod.h"
-#include "MgrLotto.h"
 //#include "taurus_constants.h"
 
 
@@ -24,7 +23,7 @@ StatPeriod::~StatPeriod()
 }
 
 
-void StatPeriod::Generate(QMap<int, QList<int>> srcData)
+void StatPeriod::Generate(QMap<int, QList<int>> srcData, bool bBonus, int lastweek)
 {
 	qDebug() << "StatPeriod::Generate()";
 	m_Stat1.clear();
@@ -35,12 +34,12 @@ void StatPeriod::Generate(QMap<int, QList<int>> srcData)
 
 	QMapIterator<int, QList<int>> iterator1(srcData);
 	iterator1.toBack();
-	while (iterator1.hasPrevious() && turn < MgrLotto::TURN_WEEK_10) {
+	while (iterator1.hasPrevious() && turn < lastweek) {
 		iterator1.previous();
 		turn++;
 		QList<int> numData = iterator1.value();
-
-		int count = 0;
+		// 보너스 조건
+		if (!bBonus) { numData.pop_back(); }
 
 		for (QList<int>::const_iterator iter = numData.cbegin(); iter != numData.constEnd(); ++iter) {
 			m_Stat1.insert(*iter, false);
@@ -48,13 +47,11 @@ void StatPeriod::Generate(QMap<int, QList<int>> srcData)
 	}
 
 	// for debug
-	qDebug() << "=======================";
-	QHashIterator<int, bool> iterator2(m_Stat1);
-	int amount = 0;
+	QMapIterator<int, bool> iterator2(m_Stat1);
 	while (iterator2.hasNext()) {
 		iterator2.next();
 		if (iterator2.value()) {
-			qDebug() << "[iterator2] key : " << iterator2.key() << ", value : " << iterator2.value();
+			qDebug() << "[StatPeriod] Number : " << iterator2.key() << ", Not appearing : " << iterator2.value();
 		}
 	}
 

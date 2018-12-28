@@ -57,7 +57,7 @@ public:
 	MgrCSV();
 	~MgrCSV();
 
-	bool					ReadFile(QString filepath, bool bBonus);
+	bool					ReadFile(QString filepath, bool bBonus = true);
 	void					WriteFile(QString filepath);
 	QMap<int, QList<int>>	GetSrcData() { return m_SrcData; };
 

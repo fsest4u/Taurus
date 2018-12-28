@@ -24,7 +24,7 @@ StatNumber::~StatNumber()
 }
 
 
-void StatNumber::Generate(QMap<int, QList<int>> srcData)
+void StatNumber::Generate(QMap<int, QList<int>> srcData, bool bBonus, int start, int end)
 {
 	qDebug() << "StatNumber::Generate()";
 	m_Stat1.clear();
@@ -33,7 +33,12 @@ void StatNumber::Generate(QMap<int, QList<int>> srcData)
 	QMapIterator<int, QList<int>> iterator1(srcData);
 	while (iterator1.hasNext()) {
 		iterator1.next();
+		// 회차 조건
+		if (iterator1.key() < start || iterator1.key() > end) { continue; }
+
 		QList<int> numData = iterator1.value();
+		// 보너스 조건
+		if (!bBonus) { numData.pop_back(); }
 
 		for (QList<int>::const_iterator iter = numData.cbegin(); iter != numData.constEnd(); ++iter) {
 			int count = m_Stat1.value(*iter, 0);
@@ -42,20 +47,21 @@ void StatNumber::Generate(QMap<int, QList<int>> srcData)
 		}
 	}
 
+	qDebug() << "Order Number =======================";
 	QMapIterator<int, int> iterator2(m_Stat1);
 	while (iterator2.hasNext()) {
 		iterator2.next();
 		// for debug
-		qDebug() << "[iterator2] key : " << iterator2.key() << ", value : " << iterator2.value();
+		qDebug() << "Number : " << iterator2.key() << ", Win : " << iterator2.value();
 		m_Stat2.insertMulti(iterator2.value(), iterator2.key());
 	}
 
 	// for debug
-	qDebug() << "=======================";
+	qDebug() << "Order Win =======================";
 	QMapIterator<int, int> iterator3(m_Stat2);
 	while (iterator3.hasNext()) {
 		iterator3.next();
-		qDebug() << "[iterator3] key : " << iterator3.key() << ", value : " << iterator3.value();
+		qDebug() << "Win : " << iterator3.key() << ", Number : " << iterator3.value();
 	}
 
 

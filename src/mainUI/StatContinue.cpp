@@ -24,7 +24,7 @@ StatContinue::~StatContinue()
 }
 
 
-void StatContinue::Generate(QMap<int, QList<int>> srcData)
+void StatContinue::Generate(QMap<int, QList<int>> srcData, bool bBonus, int start, int end)
 {
 	qDebug() << "StatContinue::Generate()";
 	m_Stat1.clear();
@@ -32,7 +32,13 @@ void StatContinue::Generate(QMap<int, QList<int>> srcData)
 	QMapIterator<int, QList<int>> iterator1(srcData);
 	while (iterator1.hasNext()) {
 		iterator1.next();
+		// 회차 조건
+		if (iterator1.key() < start || iterator1.key() > end) { continue; }
+		
 		QList<int> numData = iterator1.value();
+		// 보너스 조건
+		if (!bBonus) { numData.pop_back(); }
+		
 		QList<int> tempData;
 		tempData.clear();
 
@@ -42,18 +48,23 @@ void StatContinue::Generate(QMap<int, QList<int>> srcData)
 			if (*iter == previous + 1) {
 				tempData.insert(0, previous);
 				tempData.insert(1, *iter);
-				m_Stat1.insert(iterator1.key(), tempData);
+				m_Stat1.insertMulti(iterator1.key(), tempData);
 			}
 			previous = *iter;
 		}
 	}
 
 	// for debug
-	QMapIterator<int, QList<int>> iterator2(m_Stat1);
-	while (iterator2.hasNext()) {
-		iterator2.next();
-		QList<int> val(iterator2.value());
-		qDebug() << "[continue] iterator2.key : " << iterator2.key() << ", key : " << val.at(0) << ", value : " << val.at(1);
+	QList<int> keys = m_Stat1.uniqueKeys();
+	for (QList<int>::const_iterator iter = keys.cbegin(); iter != keys.constEnd(); ++iter) {
+		qDebug() << "[StatContinue] Turn : " << *iter << ", Pair : " << m_Stat1.values(*iter).count();
 	}
+
+	//QMapIterator<int, QList<int>> iterator2(m_Stat1);
+	//while (iterator2.hasNext()) {
+	//	iterator2.next();
+	//	QList<int> val(iterator2.value());
+	//	qDebug() << "[StatContinue] Turn : " << iterator2.key() << ", conti1 : " << val.at(0) << ", conti2 : " << val.at(1);
+	//}
 
 }

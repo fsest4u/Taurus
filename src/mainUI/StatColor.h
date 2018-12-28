@@ -28,7 +28,8 @@ public:
 	StatColor();
 	~StatColor();
 
-	void Generate(QMap<int, QList<int>> srcData);
+	void Generate(QMap<int, QList<int>> srcData, bool bBonus = true, int start = 1, int end = 1);
+	//void Generate_old(QMap<int, QList<int>> srcData, bool bBonus = true, int start = 1, int end = 1);
 
 
 
@@ -43,8 +44,11 @@ private:
 	///////////////////////////////
 
 	// StatColor
-	QMap<int, QHash<int, int>>		m_Stat1;		// 색상별 (번호대역)
-	QHash<int, int>					m_Stat2;		// 색상별 (합계)
+	//QMap<int, QMap<int, int>>		m_Stat1;		// 색상별 (번호대역)
+	//QMap<int, int>					m_Stat2;		// 색상별 (합계)
+
+	QMap<int, int>					m_Stat3;		// 색상별(합계)
+
 };
 
-#endif // MGR_LOTTO_H
+#endif // STAT_COLOR_H

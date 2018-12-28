@@ -28,7 +28,7 @@ public:
 	StatNumber();
 	~StatNumber();
 
-	void Generate(QMap<int, QList<int>> srcData);
+	void Generate(QMap<int, QList<int>> srcData, bool bBonus = true, int start = 1, int end = 1);
 
 
 
@@ -48,4 +48,4 @@ private:
 
 };
 
-#endif // STAT_CONTINUE_H
+#endif // STAT_NUMBER_H

@@ -28,7 +28,7 @@ public:
 	StatContinue();
 	~StatContinue();
 
-	void Generate(QMap<int, QList<int>> srcData);
+	void Generate(QMap<int, QList<int>> srcData, bool bBonus = false, int start = 1, int end = 1);
 
 
 
