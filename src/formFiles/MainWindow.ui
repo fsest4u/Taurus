@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>286</width>
-    <height>408</height>
+    <width>267</width>
+    <height>496</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Taurus</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QGridLayout" name="gridLayout_2">
+   <layout class="QGridLayout" name="gridLayout_6">
     <item row="0" column="0">
      <widget class="QGroupBox" name="dataBox">
       <property name="title">
@@ -53,18 +53,24 @@
       <property name="title">
        <string>보너스 번호</string>
       </property>
+      <property name="checkable">
+       <bool>false</bool>
+      </property>
       <layout class="QGridLayout" name="gridLayout">
        <item row="0" column="0">
         <widget class="QRadioButton" name="rbBonusOn">
          <property name="text">
-          <string>보너스 번호 포함</string>
+          <string>포함</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
        <item row="0" column="1">
         <widget class="QRadioButton" name="rbBonusOff">
          <property name="text">
-          <string>보너스 번호 미포함</string>
+          <string>미포함</string>
          </property>
         </widget>
        </item>
@@ -74,15 +80,68 @@
     <item row="2" column="0">
      <widget class="QGroupBox" name="optionBox">
       <property name="title">
-       <string>통계 옵션</string>
+       <string>회차별 통계</string>
       </property>
-      <layout class="QGridLayout" name="gridLayout_11">
+      <layout class="QGridLayout" name="gridLayout_5">
        <item row="0" column="0">
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>시작</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QComboBox" name="cbStart"/>
+         </item>
+         <item row="0" column="2">
+          <widget class="QLabel" name="label_2">
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
+           </property>
+           <property name="text">
+            <string>~</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="3">
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>끝</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="4">
+          <widget class="QComboBox" name="cbEnd"/>
+         </item>
+         <item row="0" column="5">
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="0">
         <layout class="QGridLayout" name="optionLayoutNumber">
          <item row="0" column="0">
           <widget class="QCheckBox" name="cbNumber">
            <property name="text">
             <string>번호별 통계</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -101,84 +160,15 @@
          </item>
         </layout>
        </item>
-       <item row="4" column="0">
-        <layout class="QGridLayout" name="optionLayoutSniffling">
-         <item row="0" column="0">
-          <widget class="QCheckBox" name="cbSniffling">
-           <property name="text">
-            <string>홀짝 통계</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <spacer name="horizontalSpacer_9">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </item>
        <item row="2" column="0">
-        <layout class="QGridLayout" name="optionLayoutSection">
-         <item row="0" column="0">
-          <widget class="QCheckBox" name="cbSection">
-           <property name="text">
-            <string>구간별 통계</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <spacer name="horizontalSpacer_7">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </item>
-       <item row="5" column="0">
-        <layout class="QGridLayout" name="optionLayoutContinue">
-         <item row="0" column="0">
-          <widget class="QCheckBox" name="cbContinue">
-           <property name="text">
-            <string>연속 번호 통계</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <spacer name="horizontalSpacer_6">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </item>
-       <item row="1" column="0">
         <layout class="QGridLayout" name="optionLayoutColor">
          <item row="0" column="0">
           <widget class="QCheckBox" name="cbColor">
            <property name="text">
             <string>색상별 통계</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -198,6 +188,123 @@
         </layout>
        </item>
        <item row="3" column="0">
+        <layout class="QGridLayout" name="optionLayoutSniffling">
+         <item row="0" column="0">
+          <widget class="QCheckBox" name="cbSniffling">
+           <property name="text">
+            <string>홀짝 통계</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <spacer name="horizontalSpacer_9">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item row="4" column="0">
+        <layout class="QGridLayout" name="optionLayoutContinue">
+         <item row="0" column="0">
+          <widget class="QCheckBox" name="cbContinue">
+           <property name="text">
+            <string>연속 번호 통계</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <spacer name="horizontalSpacer_6">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QGroupBox" name="groupBox">
+      <property name="title">
+       <string>최근순 통계</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_4">
+       <item row="0" column="0">
+        <layout class="QGridLayout" name="gridLayout_3">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>최근</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QComboBox" name="cbLastWeek"/>
+         </item>
+         <item row="0" column="2">
+          <spacer name="horizontalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="0">
+        <layout class="QGridLayout" name="optionLayoutSection">
+         <item row="0" column="0">
+          <widget class="QCheckBox" name="cbSection">
+           <property name="text">
+            <string>구간별 통계</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <spacer name="horizontalSpacer_7">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item row="2" column="0">
         <layout class="QGridLayout" name="optionLayoutPeriod">
          <item row="0" column="1">
           <spacer name="horizontalSpacer_4">
@@ -217,6 +324,9 @@
            <property name="text">
             <string>기간별 미출현 통계</string>
            </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
         </layout>
@@ -224,7 +334,7 @@
       </layout>
      </widget>
     </item>
-    <item row="3" column="0">
+    <item row="4" column="0">
      <widget class="QDialogButtonBox" name="buttonBox">
       <property name="autoFillBackground">
        <bool>false</bool>
@@ -244,7 +354,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>286</width>
+     <width>267</width>
      <height>21</height>
     </rect>
    </property>

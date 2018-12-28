@@ -1,4 +1,4 @@
-/************************************************************************
+﻿/************************************************************************
 **
 **  Copyright (C) 2018  Daniel Lee <fsest4u@gmail.com>
 **
@@ -77,7 +77,6 @@ void MainWindow::ReadSettings()
 	ui->cbSniffling->setChecked(settings.value("bsniffling", false).toBool());
 	ui->cbContinue->setChecked(settings.value("bcontinue", false).toBool());
 
-
 	settings.endGroup();
 
 }
@@ -117,7 +116,13 @@ void MainWindow::InitUI()
 
 	ConnectSignalsToSlots();
 
-	ui->dataFilepath->setText(m_CSVFileName);
+	ui->dataFilepath->setText("");
+
+	ui->cbLastWeek->addItem(tr("5 Week"), MgrLotto::TURN_WEEK_5);
+	ui->cbLastWeek->addItem(tr("10 Week"), MgrLotto::TURN_WEEK_10);
+	ui->cbLastWeek->addItem(tr("15 Week"), MgrLotto::TURN_WEEK_15);
+	ui->cbLastWeek->setCurrentIndex(ui->cbLastWeek->count() - 1);
+
 }
 
 void MainWindow::on_actionNew_triggered()
@@ -183,6 +188,25 @@ void MainWindow::on_dataButton_clicked()
 			, tr("Please, Select a data file."));
 
 	}
+
+	if (!m_CSV) {
+		m_CSV = new MgrCSV();
+	}
+
+	bool ret = m_CSV->ReadFile(m_CSVFileName);
+	if (!ret) {
+		QMessageBox::warning(this
+			, tr(QCoreApplication::applicationName().toStdString().c_str())
+			, tr("File isn't exist. Check a file."));
+		return;
+	}
+
+	for (int i = m_CSV->GetSrcData().firstKey(); i <= m_CSV->GetSrcData().lastKey(); i++) {
+		ui->cbStart->addItem(QString("%1").arg(i), i);
+		ui->cbEnd->addItem(QString("%1").arg(i), i);
+	}
+	ui->cbStart->setCurrentIndex(ui->cbStart->count() - 1);
+	ui->cbEnd->setCurrentIndex(ui->cbEnd->count() - 1);
 }
 
 
@@ -197,23 +221,14 @@ void MainWindow::Analyze()
 {
 	qDebug() << "Analyze()";
 
-	if (!m_CSV) {
-		m_CSV = new MgrCSV();
-	}
-
-	bool ret = m_CSV->ReadFile(m_CSVFileName, ui->rbBonusOn->isChecked());
-	if (!ret) {
-		QMessageBox::warning(this
-			, tr(QCoreApplication::applicationName().toStdString().c_str())
-			, tr("File isn't exist. Check a file."));
-		return;
-	}
-	
 	if (!m_Lotto) {
 		m_Lotto = new MgrLotto();
 	}
 
-	m_Lotto->SetPreference(ui->rbBonusOn->isChecked());
+	m_Lotto->SetPreference(ui->rbBonusOn->isChecked()
+						, ui->cbStart->currentData().toInt()
+						, ui->cbEnd->currentData().toInt()
+						, ui->cbLastWeek->currentData().toInt());
 
 	QList<bool> condition;
 	condition.insert(0, ui->cbNumber->isChecked());
