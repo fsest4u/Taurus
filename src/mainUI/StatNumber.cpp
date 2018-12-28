@@ -14,6 +14,8 @@
 #include "MgrLotto.h"
 //#include "taurus_constants.h"
 
+const int ARRAY_SIZE_NUMBER = 40;
+
 
 StatNumber::StatNumber()
 {
@@ -47,22 +49,26 @@ void StatNumber::Generate(QMap<int, QList<int>> srcData, bool bBonus, int start,
 		}
 	}
 
-	qDebug() << "Order Number =======================";
+	//qDebug() << "Order Number =======================";
 	QMapIterator<int, int> iterator2(m_Stat1);
 	while (iterator2.hasNext()) {
 		iterator2.next();
 		// for debug
-		qDebug() << "Number : " << iterator2.key() << ", Win : " << iterator2.value();
+		//qDebug() << "Number : " << iterator2.key() << ", Win : " << iterator2.value();
 		m_Stat2.insertMulti(iterator2.value(), iterator2.key());
 	}
 
 	// for debug
-	qDebug() << "Order Win =======================";
+	//qDebug() << "Order Win =======================";
+	m_Ret.clear();
+	int turn = 0;
 	QMapIterator<int, int> iterator3(m_Stat2);
 	iterator3.toBack();
-	while (iterator3.hasPrevious()) {
+	while (iterator3.hasPrevious() && turn < ARRAY_SIZE_NUMBER) {
 		iterator3.previous();
-		qDebug() << "Win : " << iterator3.key() << ", Number : " << iterator3.value();
+		//qDebug() << "Win : " << iterator3.key() << ", Number : " << iterator3.value();
+		m_Ret.append(iterator3.value());
+		turn++;
 	}
 
 

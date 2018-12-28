@@ -121,7 +121,7 @@ void MainWindow::InitUI()
 	ui->cbLastWeek->addItem(tr("5 Week"), MgrLotto::TURN_WEEK_5);
 	ui->cbLastWeek->addItem(tr("10 Week"), MgrLotto::TURN_WEEK_10);
 	ui->cbLastWeek->addItem(tr("15 Week"), MgrLotto::TURN_WEEK_15);
-	ui->cbLastWeek->setCurrentIndex(0);
+	ui->cbLastWeek->setCurrentIndex(ui->cbLastWeek->count() - 1);
 
 }
 
@@ -255,4 +255,6 @@ void MainWindow::Analyze()
 	condition.insert(4, ui->cbSniffling->isChecked());
 	condition.insert(5, ui->cbContinue->isChecked());
 	m_Lotto->GenerateInfo(condition, m_CSV->GetSrcData());
+
+	m_Lotto->ExportData();
 }

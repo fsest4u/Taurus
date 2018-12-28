@@ -137,6 +137,9 @@
         <layout class="QGridLayout" name="optionLayoutNumber">
          <item row="0" column="0">
           <widget class="QCheckBox" name="cbNumber">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="text">
             <string>번호별 통계</string>
            </property>

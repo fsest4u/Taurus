@@ -29,6 +29,7 @@ public:
 	~StatContinue();
 
 	void Generate(QMap<int, QList<int>> srcData, bool bBonus = false, int start = 1, int end = 1);
+	QList<int> GetList() { return m_Ret; }
 
 
 
@@ -47,6 +48,7 @@ private:
 	QMap<int, int>					m_Stat2;		// 연속번호 쌍, 출현 회수
 	QMap<int, int>					m_Stat3;		// 출현 회수, 연속번호 쌍
 
+	QList<int>						m_Ret;			// 반환 데이타
 
 };
 

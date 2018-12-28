@@ -14,6 +14,8 @@
 #include "MgrLotto.h"
 //#include "taurus_constants.h"
 
+const int ARRAY_SIZE_COLOR = 20;
+
 
 StatColor::StatColor()
 {
@@ -40,20 +42,20 @@ void StatColor::Generate(QMap<int, QList<int>> srcData, bool bBonus, int start, 
 		if (!bBonus) { numData.pop_back(); }
 
 		for (QList<int>::const_iterator iter = numData.cbegin(); iter != numData.constEnd(); ++iter) {
-			if (*iter <= MgrLotto::UNIT_10_10) {
+			if (*iter < MgrLotto::UNIT_10_11) {
 				m_Stat3.insertMulti(MgrLotto::UNIT_10_1, 1);
 			}
-			else if (*iter <= MgrLotto::UNIT_10_20) {
-				m_Stat3.insertMulti(MgrLotto::UNIT_10_10, 1);
+			else if (*iter < MgrLotto::UNIT_10_21) {
+				m_Stat3.insertMulti(MgrLotto::UNIT_10_11, 1);
 			}
-			else if (*iter <= MgrLotto::UNIT_10_30) {
-				m_Stat3.insertMulti(MgrLotto::UNIT_10_20, 1);
+			else if (*iter < MgrLotto::UNIT_10_31) {
+				m_Stat3.insertMulti(MgrLotto::UNIT_10_21, 1);
 			}
-			else if (*iter <= MgrLotto::UNIT_10_40) {
-				m_Stat3.insertMulti(MgrLotto::UNIT_10_30, 1);
+			else if (*iter < MgrLotto::UNIT_10_41) {
+				m_Stat3.insertMulti(MgrLotto::UNIT_10_31, 1);
 			}
 			else {
-				m_Stat3.insertMulti(MgrLotto::UNIT_10_40, 1);
+				m_Stat3.insertMulti(MgrLotto::UNIT_10_41, 1);
 			}
 		}
 	}
@@ -74,9 +76,36 @@ void StatColor::Generate(QMap<int, QList<int>> srcData, bool bBonus, int start, 
 	while (iterator2.hasPrevious()) {
 		iterator2.previous();
 
-		double avg = iterator2.key() * 100 / amount;
+		int avg = iterator2.key() * 100 / amount;
 		qDebug() << "[StatColor] WIn : " << iterator2.key() << ", NumberArea : " << iterator2.value() << ", percent : " << avg;
 	}
+}
+
+QList<int> StatColor::GetList(QList<int> baseList)
+{
+	int amount = m_Stat3.count();
+
+	m_Ret.clear();
+	QMapIterator<int, int> iterator2(m_Stat4);
+	iterator2.toBack();
+	while (iterator2.hasPrevious()) {
+		iterator2.previous();
+
+		int avg = iterator2.key() * 100 / amount;
+		//qDebug() << "[StatColor] WIn : " << iterator2.key() << ", NumberArea : " << iterator2.value() << ", percent : " << avg;
+		int count = ARRAY_SIZE_COLOR * avg / 100;
+		for (QList<int>::const_iterator iter = baseList.constBegin(); iter != baseList.constEnd(); ++iter) {
+
+			if (count <= 0) break;
+
+			if (*iter >= iterator2.value() && *iter < iterator2.value() + 10) {
+				m_Ret.append(*iter);
+				count--;
+			}
+		}
+	}
+
+	return m_Ret;
 }
 
 //void StatColor::Generate_old(QMap<int, QList<int>> srcData, bool bBonus, int start, int end)

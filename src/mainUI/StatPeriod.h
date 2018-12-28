@@ -30,7 +30,7 @@ public:
 	~StatPeriod();
 
 	void Generate(QMap<int, QList<int>> srcData, bool bBonus = true, int lastweek = MgrLotto::TURN_WEEK_5);
-
+	QList<int> GetList();
 
 
 private slots:
@@ -44,7 +44,9 @@ private:
 	///////////////////////////////
 
 	// StatPeriod
-	QMap<int, bool>				m_Stat1;		// 기간별 미출현 번호, 미출현 여부
+	QMap<int, bool>					m_Stat1;		// 기간별 미출현 번호, 미출현 여부
+
+	QList<int>						m_Ret;			// 반환 데이타
 
 };
 

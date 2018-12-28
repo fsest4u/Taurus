@@ -29,6 +29,7 @@ public:
 	~StatNumber();
 
 	void Generate(QMap<int, QList<int>> srcData, bool bBonus = true, int start = 1, int end = 1);
+	QList<int> GetList() { return m_Ret; }
 
 
 
@@ -46,6 +47,7 @@ private:
 	QMap<int, int>					m_Stat1;		// 번호순, 당첨 회수
 	QMap<int, int>					m_Stat2;		// 당첨 회수순, 번호
 
+	QList<int>						m_Ret;			// 반환 데이타
 };
 
 #endif // STAT_NUMBER_H

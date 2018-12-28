@@ -44,10 +44,10 @@ public:
 	enum SectionUnit10
 	{
 		UNIT_10_1 = 1,
-		UNIT_10_10 = 10,
-		UNIT_10_20 = 20,
-		UNIT_10_30 = 30,
-		UNIT_10_40 = 40,
+		UNIT_10_11 = 11,
+		UNIT_10_21 = 21,
+		UNIT_10_31 = 31,
+		UNIT_10_41 = 41,
 		UNIT_10_MAX = 100
 	};
 
@@ -70,7 +70,7 @@ private slots:
 
 private:
 
-
+	int RandInt(int low, int high);
 
 	///////////////////////////////
 	// PRIVATE MEMBER VARIABLES
@@ -80,6 +80,11 @@ private:
 	int					m_StartTurn;
 	int					m_EndTurn;
 	int					m_LastWeek;
+
+	QList<int>			m_BaseList;
+	QList<int>			m_PeriodList;
+
+	QList<int>			m_LottoList;
 
 	ProgressWidget*		m_ProgressWidget;
 

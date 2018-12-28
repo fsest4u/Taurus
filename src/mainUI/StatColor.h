@@ -30,6 +30,7 @@ public:
 
 	void Generate(QMap<int, QList<int>> srcData, bool bBonus = true, int start = 1, int end = 1);
 	//void Generate_old(QMap<int, QList<int>> srcData, bool bBonus = true, int start = 1, int end = 1);
+	QList<int> GetList(QList<int>);
 
 
 
@@ -49,6 +50,8 @@ private:
 
 	QMap<int, int>					m_Stat3;		// 번호 대역순, 당첨 회수
 	QMap<int, int>					m_Stat4;		// 당첨 회수순, 번호 대역
+
+	QList<int>						m_Ret;			// 반환 데이타
 
 };
 

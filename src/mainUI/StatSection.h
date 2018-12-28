@@ -31,8 +31,7 @@ public:
 
 	void Generate(QMap<int, QList<int>> srcData, bool bBonus = true, int lastweek = MgrLotto::TURN_WEEK_5);
 	//void Generate_old(QMap<int, QList<int>> srcData, bool bBonus = true, int lastweek = MgrLotto::TURN_WEEK_5);
-
-
+	QList<int> GetList(QList<int> baseList);
 
 private slots:
 
@@ -51,6 +50,7 @@ private:
 	QMap<int, int>					m_Stat3;			// 번호 대역, 당첨 회수
 	QMap<int, int>					m_Stat4;			// 당첨 회수순, 번호 대역
 
+	QList<int>						m_Ret;			// 반환 데이타
 
 };
 
