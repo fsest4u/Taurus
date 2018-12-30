@@ -9,10 +9,9 @@
 *************************************************************************/
 
 #include <QtDebug>
-#include <QtCore/QTime>
-#include <QtCore/QtGlobal>
 
 #include "misc/ProgressWidget.h"
+#include "misc/SettingData.h"
 #include "MgrLotto.h"
 #include "StatColor.h"
 #include "StatContinue.h"
@@ -53,6 +52,7 @@ void MgrLotto::SetPreference(bool bBonus, int start, int end, int lastweek)
 
 void MgrLotto::GenerateInfo(QList<bool> condition, QMap<int, QList<int>> srcData)
 {
+	// 순차적으로 설정
 	if (condition.at(CON_NUMBER)) {
 		StatNumber number;
 		number.Generate(srcData, m_bBonus, m_StartTurn, m_EndTurn);
@@ -62,6 +62,7 @@ void MgrLotto::GenerateInfo(QList<bool> condition, QMap<int, QList<int>> srcData
 			qDebug() << "=== CON_NUMBER " << *iter;
 		}
 	}
+	// 랜덤하게 설정
 	if (condition.at(CON_COLOR)) {
 		StatColor color;
 		color.Generate(srcData, true, m_StartTurn, m_EndTurn);
@@ -71,6 +72,7 @@ void MgrLotto::GenerateInfo(QList<bool> condition, QMap<int, QList<int>> srcData
 			qDebug() << "=== CON_COLOR " << *iter;
 		}
 	}
+	// 순차적으로 설정
 	if (condition.at(CON_SECTION)) {
 		StatSection section;
 		section.Generate(srcData, true, m_LastWeek);
@@ -80,6 +82,7 @@ void MgrLotto::GenerateInfo(QList<bool> condition, QMap<int, QList<int>> srcData
 			qDebug() << "=== CON_SECTION " << *iter;
 		}
 	}
+	// 랜덤하게 설정
 	if (condition.at(CON_PERIOD)) {
 		StatPeriod period;
 		period.Generate(srcData, true, m_LastWeek);
@@ -89,6 +92,7 @@ void MgrLotto::GenerateInfo(QList<bool> condition, QMap<int, QList<int>> srcData
 			qDebug() << "=== CON_PERIOD " << *iter;
 		}
 	}
+	// 순차적으로 설정
 	if (condition.at(CON_SNIFFLING)) {
 		StatSniffling sniffling;
 		sniffling.Generate(srcData, false, m_StartTurn, m_EndTurn);
@@ -127,17 +131,12 @@ QList<int> MgrLotto::ExportData()
 		qDebug() << "=== tempList " << *iter;
 	}
 
-	// Create seed for the random
-	// That is needed only once on application startup
-	QTime time = QTime::currentTime();
-	qsrand((uint)time.msec());
-
-	//qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
-
 	m_LottoList.clear();
+	SettingData settings;
 	while (m_LottoList.count() < 6) {
 
-		int random = RandInt(0, tempList.count() - 1);
+		// 랜덤하게 설정
+		int random = settings.RandInt(0, tempList.count() - 1);
 		qDebug() << "random " << random;
 		if (!m_LottoList.contains(tempList[random])) {
 			qDebug() << "lotto number " << tempList[random];
@@ -148,10 +147,5 @@ QList<int> MgrLotto::ExportData()
 	return m_LottoList;
 }
 
-int MgrLotto::RandInt(int low, int high)
-{
-	// Random number between low and high
-	return qrand() % ((high + 1) - low) + low;
-}
 
 

@@ -70,7 +70,6 @@ private slots:
 
 private:
 
-	int RandInt(int low, int high);
 
 	///////////////////////////////
 	// PRIVATE MEMBER VARIABLES

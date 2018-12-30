@@ -20,6 +20,7 @@ public:
 	SettingData();
 	virtual ~SettingData();
 
+	int RandInt(int low, int high);
 
 private:
 
