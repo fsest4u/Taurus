@@ -30,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	, m_CSVFileName("")
 	, m_CSV(NULL)
 	, m_Lotto(NULL)
+	, m_RemainCount(5)
 {
     ui->setupUi(this);
 
@@ -77,6 +78,8 @@ void MainWindow::ReadSettings()
 	ui->cbSniffling->setChecked(settings.value("bsniffling", false).toBool());
 	ui->cbContinue->setChecked(settings.value("bcontinue", false).toBool());
 
+	//m_RemainCount = settings.value("count", 5).toInt();
+
 	settings.endGroup();
 
 }
@@ -100,6 +103,8 @@ void MainWindow::WriteSettings()
 	settings.setValue("bsniffling", ui->cbSniffling->isChecked());
 	settings.setValue("bcontinue", ui->cbContinue->isChecked());
 
+	//settings.setValue("count", m_RemainCount);
+
 	settings.endGroup();
 }
 
@@ -118,10 +123,14 @@ void MainWindow::InitUI()
 
 	ui->dataFilepath->setText("");
 
+	ui->cbNumber->setChecked(true);
+
 	ui->cbLastWeek->addItem(tr("5 Week"), MgrLotto::TURN_WEEK_5);
 	ui->cbLastWeek->addItem(tr("10 Week"), MgrLotto::TURN_WEEK_10);
 	ui->cbLastWeek->addItem(tr("15 Week"), MgrLotto::TURN_WEEK_15);
 	ui->cbLastWeek->setCurrentIndex(ui->cbLastWeek->count() - 1);
+
+	ui->remainCount->setText(QString::number(m_RemainCount));
 
 }
 
@@ -237,6 +246,20 @@ void MainWindow::SetEndTurn(int index)
 void MainWindow::Analyze()
 {
 	qDebug() << "Analyze()";
+	if (ui->dataFilepath->text().isEmpty()) {
+		QMessageBox::warning(this
+			, tr(QCoreApplication::applicationName().toStdString().c_str())
+			, tr("Please, Select a data file."));
+		return;
+	}
+	if (m_RemainCount <= 0) {
+		QMessageBox::warning(this
+			, tr(QCoreApplication::applicationName().toStdString().c_str())
+			, tr("You have exceeded the number available."));
+		return;
+	}
+	m_RemainCount--;
+	ui->remainCount->setText(QString::number(m_RemainCount));
 
 	if (!m_Lotto) {
 		m_Lotto = new MgrLotto();
@@ -256,5 +279,12 @@ void MainWindow::Analyze()
 	condition.insert(5, ui->cbContinue->isChecked());
 	m_Lotto->GenerateInfo(condition, m_CSV->GetSrcData());
 
-	m_Lotto->ExportData();
+	QList<int> lotto = m_Lotto->ExportData();
+	ui->lotto0->setText(QString::number(lotto.at(0)));
+	ui->lotto1->setText(QString::number(lotto.at(1)));
+	ui->lotto2->setText(QString::number(lotto.at(2)));
+	ui->lotto3->setText(QString::number(lotto.at(3)));
+	ui->lotto4->setText(QString::number(lotto.at(4)));
+	ui->lotto5->setText(QString::number(lotto.at(5)));
+
 }

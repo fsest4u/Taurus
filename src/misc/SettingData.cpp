@@ -15,7 +15,7 @@
 
 
 SettingData::SettingData()
-	: QSettings(QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/aquarius/aquarius.ini", QSettings::IniFormat)
+	: QSettings(QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/taurus/taurus.ini", QSettings::IniFormat)
 {
 }
 

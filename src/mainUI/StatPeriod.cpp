@@ -13,6 +13,8 @@
 #include "StatPeriod.h"
 //#include "taurus_constants.h"
 
+const int ARRAY_SIZE_PERIOD = 2;
+
 
 StatPeriod::StatPeriod()
 {
@@ -61,11 +63,18 @@ QList<int> StatPeriod::GetList()
 {
 	m_Ret.clear();
 	QMapIterator<int, bool> iterator2(m_Stat1);
+	int count = ARRAY_SIZE_PERIOD;
+
 	while (iterator2.hasNext()) {
+
+		if (count <= 0) break;
+
 		iterator2.next();
+
 		if (iterator2.value()) {
 			//qDebug() << "[StatPeriod] Number : " << iterator2.key() << ", Not appearing : " << iterator2.value();
 			m_Ret.append(iterator2.key());
+			count--;
 		}
 	}
 

@@ -106,17 +106,9 @@ void MgrLotto::GenerateInfo(QList<bool> condition, QMap<int, QList<int>> srcData
 }
 
 
-void MgrLotto::ExportData()
+QList<int> MgrLotto::ExportData()
 {
 	qDebug() << "ExportData()";
-	m_LottoList.clear();
-
-	// Create seed for the random
-	// That is needed only once on application startup
-	QTime time = QTime::currentTime();
-	qsrand((uint)time.msec());
-
-	//qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
 
 	//QList<int> tempList = m_BaseList + m_PeriodList;
 	QList<int> tempList;
@@ -135,19 +127,25 @@ void MgrLotto::ExportData()
 		qDebug() << "=== tempList " << *iter;
 	}
 
-	int count = 6;
-	for (int i = 0; i < tempList.count() - 1; i++) {
+	// Create seed for the random
+	// That is needed only once on application startup
+	QTime time = QTime::currentTime();
+	qsrand((uint)time.msec());
 
-		if (count <= 0) break;
+	//qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
+
+	m_LottoList.clear();
+	while (m_LottoList.count() < 6) {
 
 		int random = RandInt(0, tempList.count() - 1);
 		qDebug() << "random " << random;
 		if (!m_LottoList.contains(tempList[random])) {
-			qDebug() << "lotto number [" << i << "] " << tempList[random];
+			qDebug() << "lotto number " << tempList[random];
 			m_LottoList.append(tempList[random]);
-			count--;
 		}
 	}
+
+	return m_LottoList;
 }
 
 int MgrLotto::RandInt(int low, int high)

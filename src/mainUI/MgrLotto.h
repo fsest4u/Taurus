@@ -61,7 +61,7 @@ public:
 	void SetPreference(bool bBonus = true, int start = 1, int end = 5, int lastweek = TURN_WEEK_5);
 	void GenerateInfo(QList<bool> condition, QMap<int, QList<int>> srcData);
 
-	void ExportData();
+	QList<int> ExportData();
 
 
 

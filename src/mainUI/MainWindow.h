@@ -64,11 +64,10 @@ private:
 	QString		m_LastFolderOpen;
 	QString		m_CSVFileName;
 
+	int			m_RemainCount;
+
 	MgrCSV		*m_CSV;
 	MgrLotto	*m_Lotto;
-
-
-
 
     Ui::MainWindow *ui; 
 };
