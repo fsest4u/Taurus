@@ -10,6 +10,7 @@
 
 #include <QtDebug>
 
+#include "misc/SettingData.h"
 #include "StatSniffling.h"
 #include "MgrLotto.h"
 //#include "taurus_constants.h"
@@ -113,6 +114,8 @@ void StatSniffling::Generate(QMap<int, QList<int>> srcData, bool bBonus, int sta
 
 QList<int> StatSniffling::GetList(QList<int> baseList)
 {
+	SettingData settings;
+
 	QMapIterator<int, QList<int>> iterator4(m_Stat3);
 	iterator4.toBack();
 	while (iterator4.hasPrevious()) {
@@ -120,18 +123,31 @@ QList<int> StatSniffling::GetList(QList<int> baseList)
 		qDebug() << "[StatSniffling] Win : " << iterator4.key()
 			<< ", Odd : " << iterator4.value().at(SNIFFLING_COUNT)
 			<< ", Average : " << iterator4.value().at(SNIFFLING_TOTAL);
-		int count = iterator4.value().at(SNIFFLING_COUNT) * ARRAY_SIZE_SNIFFLING;
 
+		int count = 0;
+		// 전체 항목의 홀수 개수 체크
 		for (QList<int>::const_iterator iter = baseList.constBegin(); iter != baseList.constEnd(); ++iter) {
-
-			if (count <= 0) break;
-
 			if (*iter % 2) {
-				m_Ret.append(*iter);
-				count--;
+				count++;
+			}
+		}
+		// 구할 홀수 개수와 전체 홀수 개수를 비교하여 제일 작은 값으로 설정
+		count = qMin(count, iterator4.value().at(SNIFFLING_COUNT) * ARRAY_SIZE_SNIFFLING);
+		while (count > 0) {
+
+			int random = settings.RandInt(0, baseList.count() - 1);
+			//if (count <= 0) break;
+
+			if (baseList.at(random) % 2) {
+				if (!m_Ret.contains(baseList.at(random))) {
+					m_Ret.append(baseList.at(random));
+					count--;
+				}
 			}
 			else {
-				m_Ret.append(*iter);
+				if (!m_Ret.contains(baseList.at(random))) {
+					m_Ret.append(baseList.at(random));
+				}
 			}
 		}
 

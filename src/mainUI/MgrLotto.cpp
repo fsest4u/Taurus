@@ -58,6 +58,7 @@ void MgrLotto::GenerateInfo(QList<bool> condition, QMap<int, QList<int>> srcData
 		number.Generate(srcData, m_bBonus, m_StartTurn, m_EndTurn);
 		m_BaseList = number.GetList();
 		// for debug
+		qDebug() << "=== list count " << m_BaseList.count();
 		for (QList<int>::const_iterator iter = m_BaseList.cbegin(); iter != m_BaseList.constEnd(); ++iter) {
 			qDebug() << "=== CON_NUMBER " << *iter;
 		}
@@ -68,40 +69,45 @@ void MgrLotto::GenerateInfo(QList<bool> condition, QMap<int, QList<int>> srcData
 		color.Generate(srcData, true, m_StartTurn, m_EndTurn);
 		m_BaseList = color.GetList(m_BaseList);
 		// for debug
+		qDebug() << "=== list count " << m_BaseList.count();
 		for (QList<int>::const_iterator iter = m_BaseList.cbegin(); iter != m_BaseList.constEnd(); ++iter) {
 			qDebug() << "=== CON_COLOR " << *iter;
 		}
 	}
-	// 순차적으로 설정
+	// 랜덤하게 설정
 	if (condition.at(CON_SECTION)) {
 		StatSection section;
 		section.Generate(srcData, true, m_LastWeek);
 		m_BaseList = section.GetList(m_BaseList);
 		// for debug
+		qDebug() << "=== list count " << m_BaseList.count();
 		for (QList<int>::const_iterator iter = m_BaseList.cbegin(); iter != m_BaseList.constEnd(); ++iter) {
 			qDebug() << "=== CON_SECTION " << *iter;
 		}
 	}
 	// 랜덤하게 설정
-	if (condition.at(CON_PERIOD)) {
-		StatPeriod period;
-		period.Generate(srcData, true, m_LastWeek);
-		m_PeriodList = period.GetList();
-		// for debug
-		for (QList<int>::const_iterator iter = m_PeriodList.cbegin(); iter != m_PeriodList.constEnd(); ++iter) {
-			qDebug() << "=== CON_PERIOD " << *iter;
-		}
-	}
-	// 순차적으로 설정
 	if (condition.at(CON_SNIFFLING)) {
 		StatSniffling sniffling;
 		sniffling.Generate(srcData, false, m_StartTurn, m_EndTurn);
 		m_BaseList = sniffling.GetList(m_BaseList);
 		// for debug
+		qDebug() << "=== list count " << m_BaseList.count();
 		for (QList<int>::const_iterator iter = m_BaseList.cbegin(); iter != m_BaseList.constEnd(); ++iter) {
 			qDebug() << "=== CON_SNIFFLING " << *iter;
 		}
 	}
+	// 순차적으로 설정
+	if (condition.at(CON_PERIOD)) {
+		StatPeriod period;
+		period.Generate(srcData, true, m_LastWeek);
+		m_PeriodList = period.GetList();
+		// for debug
+		qDebug() << "=== list count " << m_PeriodList.count();
+		for (QList<int>::const_iterator iter = m_PeriodList.cbegin(); iter != m_PeriodList.constEnd(); ++iter) {
+			qDebug() << "=== CON_PERIOD " << *iter;
+		}
+	}
+	// todo
 	if (condition.at(CON_COUTINUE)) {
 		StatContinue conti;
 		conti.Generate(srcData, false, m_StartTurn, m_EndTurn);
@@ -127,6 +133,7 @@ QList<int> MgrLotto::ExportData()
 		}
 	}
 	// for debug
+	qDebug() << "=== list count " << m_BaseList.count();
 	for (QList<int>::const_iterator iter = tempList.cbegin(); iter != tempList.constEnd(); ++iter) {
 		qDebug() << "=== tempList " << *iter;
 	}

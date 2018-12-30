@@ -220,8 +220,11 @@ void MainWindow::on_dataButton_clicked()
 		return;
 	}
 
-	for (int i = m_CSV->GetSrcData().firstKey(); i <= m_CSV->GetSrcData().lastKey(); i++) {
+	// 충분한 데이타를 입력받기 위해서 최소 5회차의 입력값을 설정
+	for (int i = m_CSV->GetSrcData().firstKey(); i <= m_CSV->GetSrcData().lastKey() - 5; i++) {
 		ui->cbStart->addItem(QString("%1").arg(i), i);
+	}
+	for (int i = m_CSV->GetSrcData().firstKey(); i <= m_CSV->GetSrcData().lastKey(); i++) {
 		ui->cbEnd->addItem(QString("%1").arg(i), i);
 	}
 	ui->cbStart->setCurrentIndex(ui->cbStart->count() - 1);
@@ -240,15 +243,19 @@ void MainWindow::ConnectSignalsToSlots()
 
 void MainWindow::SetStartTurn(int index)
 {
+	// 시작, 끝 차이가 최소 5회차
 	if (ui->cbEnd->currentIndex() < index) {
-		ui->cbEnd->setCurrentIndex(index);
+		int temp = qMin(index + 5, ui->cbEnd->count() - 1);
+		ui->cbEnd->setCurrentIndex(temp);
 	}
 }
 
 void MainWindow::SetEndTurn(int index)
 {
+	// 시작, 끝 차이가 최소 5회차
 	if (ui->cbStart->currentIndex() > index) {
-		ui->cbStart->setCurrentIndex(index);
+		int temp = qMax(index - 5, 0);
+		ui->cbStart->setCurrentIndex(temp);
 	}
 }
 

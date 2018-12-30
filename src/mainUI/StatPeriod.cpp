@@ -73,8 +73,10 @@ QList<int> StatPeriod::GetList()
 
 		if (iterator2.value()) {
 			//qDebug() << "[StatPeriod] Number : " << iterator2.key() << ", Not appearing : " << iterator2.value();
-			m_Ret.append(iterator2.key());
-			count--;
+			if (!m_Ret.contains(iterator2.key())) {
+				m_Ret.append(iterator2.key());
+				count--;
+			}
 		}
 	}
 
