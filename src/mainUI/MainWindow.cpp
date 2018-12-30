@@ -135,7 +135,7 @@ void MainWindow::InitUI()
 	ui->cbLastWeek->addItem(tr("15 Week"), MgrLotto::TURN_WEEK_15);
 	ui->cbLastWeek->setCurrentIndex(ui->cbLastWeek->count() - 1);
 
-	m_WeekNumber -= 1;// temp code
+	//m_WeekNumber -= 1;// temp code
 	if (m_WeekNumber < QDate::currentDate().weekNumber()) {
 		m_WeekNumber = QDate::currentDate().weekNumber();
 		m_RemainCount = REMAIN_COUNT;	// reset remain count
