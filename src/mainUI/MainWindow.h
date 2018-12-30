@@ -65,6 +65,7 @@ private:
 	QString		m_CSVFileName;
 
 	int			m_RemainCount;
+	int			m_WeekNumber;
 
 	MgrCSV		*m_CSV;
 	MgrLotto	*m_Lotto;

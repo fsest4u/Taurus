@@ -10,6 +10,7 @@
 
 #include <QtDebug>
 #include <QtCore/QStandardPaths>
+#include <QtCore/QDate>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QMessageBox>
@@ -23,6 +24,9 @@
 
 static const QString SETTINGS_GROUP = "mainWindow";
 
+const int REMAIN_COUNT = 5;
+
+
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow)
@@ -30,7 +34,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	, m_CSVFileName("")
 	, m_CSV(NULL)
 	, m_Lotto(NULL)
-	, m_RemainCount(5)
+	, m_WeekNumber(0)
+	, m_RemainCount(REMAIN_COUNT)
 {
     ui->setupUi(this);
 
@@ -68,6 +73,8 @@ void MainWindow::ReadSettings()
 	// The last folder used for saving and opening files
 	m_LastFolderOpen = settings.value("lastfolderopen", QDir::homePath()).toString();
 	m_CSVFileName = settings.value("lastcsvfile", QDir::homePath()).toString();
+	m_WeekNumber = settings.value("weeknumber", QDate::currentDate().weekNumber()).toInt();
+	m_RemainCount = settings.value("count", REMAIN_COUNT).toInt();
 
 	ui->rbBonusOn->setChecked(settings.value("bbonus", false).toBool());
 	ui->rbBonusOff->setChecked(!settings.value("bbonus", false).toBool());
@@ -77,8 +84,6 @@ void MainWindow::ReadSettings()
 	ui->cbPeriod->setChecked(settings.value("bperiod", false).toBool());
 	ui->cbSniffling->setChecked(settings.value("bsniffling", false).toBool());
 	ui->cbContinue->setChecked(settings.value("bcontinue", false).toBool());
-
-	//m_RemainCount = settings.value("count", 5).toInt();
 
 	settings.endGroup();
 
@@ -94,6 +99,8 @@ void MainWindow::WriteSettings()
 	// The last folders used for saving and opening files
 	settings.setValue("lastfolderopen", m_LastFolderOpen);
 	settings.setValue("lastcsvfile", m_CSVFileName);
+	settings.setValue("weeknumber", m_WeekNumber);
+	settings.setValue("count", m_RemainCount);
 
 	settings.setValue("bbonus", ui->rbBonusOn->isChecked());
 	settings.setValue("bnumber", ui->cbNumber->isChecked());
@@ -102,8 +109,6 @@ void MainWindow::WriteSettings()
 	settings.setValue("bperiod", ui->cbPeriod->isChecked());
 	settings.setValue("bsniffling", ui->cbSniffling->isChecked());
 	settings.setValue("bcontinue", ui->cbContinue->isChecked());
-
-	//settings.setValue("count", m_RemainCount);
 
 	settings.endGroup();
 }
@@ -130,6 +135,11 @@ void MainWindow::InitUI()
 	ui->cbLastWeek->addItem(tr("15 Week"), MgrLotto::TURN_WEEK_15);
 	ui->cbLastWeek->setCurrentIndex(ui->cbLastWeek->count() - 1);
 
+	m_WeekNumber -= 1;// temp code
+	if (m_WeekNumber < QDate::currentDate().weekNumber()) {
+		m_WeekNumber = QDate::currentDate().weekNumber();
+		m_RemainCount = REMAIN_COUNT;	// reset remain count
+	}
 	ui->remainCount->setText(QString::number(m_RemainCount));
 
 }
