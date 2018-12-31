@@ -137,7 +137,8 @@ void MainWindow::InitUI()
 	ui->cbLastWeek->setCurrentIndex(ui->cbLastWeek->count() - 1);
 
 	//m_WeekNumber -= 1;// temp code
-	if (m_WeekNumber < QDate::currentDate().weekNumber()) {
+	if (m_WeekNumber < QDate::currentDate().weekNumber()
+		|| m_RemainCount > REMAIN_COUNT) {
 		m_WeekNumber = QDate::currentDate().weekNumber();
 		m_RemainCount = REMAIN_COUNT;	// reset remain count
 	}
