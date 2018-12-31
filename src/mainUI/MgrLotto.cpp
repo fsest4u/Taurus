@@ -96,7 +96,7 @@ void MgrLotto::GenerateInfo(QList<bool> condition, QMap<int, QList<int>> srcData
 			qDebug() << "=== CON_SNIFFLING " << *iter;
 		}
 	}
-	// 순차적으로 설정
+	// 랜덤하게 설정
 	if (condition.at(CON_PERIOD)) {
 		StatPeriod period;
 		period.Generate(srcData, true, m_LastWeek);

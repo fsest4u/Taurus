@@ -10,6 +10,7 @@
 
 #include <QtDebug>
 
+#include "misc/SettingData.h"
 #include "StatPeriod.h"
 //#include "taurus_constants.h"
 
@@ -53,7 +54,7 @@ void StatPeriod::Generate(QMap<int, QList<int>> srcData, bool bBonus, int lastwe
 	while (iterator2.hasNext()) {
 		iterator2.next();
 		if (iterator2.value()) {
-			//qDebug() << "[StatPeriod] Number : " << iterator2.key() << ", Not appearing : " << iterator2.value();
+			qDebug() << "[StatPeriod] Number : " << iterator2.key() << ", Not appearing : " << iterator2.value();
 		}
 	}
 
@@ -61,20 +62,19 @@ void StatPeriod::Generate(QMap<int, QList<int>> srcData, bool bBonus, int lastwe
 
 QList<int> StatPeriod::GetList()
 {
+	SettingData settings;
+
 	m_Ret.clear();
-	QMapIterator<int, bool> iterator2(m_Stat1);
 	int count = ARRAY_SIZE_PERIOD;
 
-	while (iterator2.hasNext()) {
+	while (count > 0) {
 
-		if (count <= 0) break;
+		int random = settings.RandInt(0, m_Stat1.count() - 1);
 
-		iterator2.next();
-
-		if (iterator2.value()) {
-			//qDebug() << "[StatPeriod] Number : " << iterator2.key() << ", Not appearing : " << iterator2.value();
-			if (!m_Ret.contains(iterator2.key())) {
-				m_Ret.append(iterator2.key());
+		if (m_Stat1.value(random)) {
+			//qDebug() << "[StatPeriod] Number : " << random << ", Not appearing : " << true;
+			if (!m_Ret.contains(random)) {
+				m_Ret.append(random);
 				count--;
 			}
 		}
