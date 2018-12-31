@@ -19,8 +19,8 @@
 
 const QString SETTINGS_GROUP = "limitdate";
 
-const int EXPIRED_YEAR = 2018;
-const int EXPIRED_MONTH = 06;
+const int EXPIRED_YEAR = 2019;
+const int EXPIRED_MONTH = 03;
 const int EXPIRED_DAY = 30;
 
 const int KEY_SIZE = 16;      // 16 : 128, 24 : 192, 32 : 256

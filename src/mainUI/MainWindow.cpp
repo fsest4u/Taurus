@@ -18,6 +18,7 @@
 #include "MgrCSV.h"
 #include "MgrLotto.h"
 #include "misc/SettingData.h"
+#include "Misc/LimitDate.h"
 
 #include "mainwindow.h"
 #include "ui_MainWindow.h"
@@ -280,6 +281,8 @@ void MainWindow::Analyze()
 	m_RemainCount--;
 	ui->remainCount->setText(QString::number(m_RemainCount));
 
+	if (!OnCheckLimited()) { return; }
+
 	if (!m_Lotto) {
 		m_Lotto = new MgrLotto();
 	}
@@ -324,4 +327,28 @@ void MainWindow::Analyze()
 			, tr("Congratulations. The %1 th").arg(keys.at(0)));
 	}
 
+}
+
+bool MainWindow::OnCheckLimited()
+{
+	bool ret = false;
+
+	LimitDate* limitDate = new LimitDate();
+	if (limitDate->CheckExpiredDate()) {
+		QDate date = limitDate->GetExpiredDate();
+		QMessageBox::critical(this, tr(QCoreApplication::applicationName().toStdString().c_str())
+			, tr("The function has expired. %1.%2.%3").arg(date.year()).arg(date.month()).arg(date.day()));
+
+		ret = false;
+	}
+	else {
+		ret = true;
+	}
+
+	if (limitDate) {
+		delete limitDate;
+		limitDate = 0;
+	}
+
+	return ret;
 }
