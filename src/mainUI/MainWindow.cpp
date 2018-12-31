@@ -142,6 +142,7 @@ void MainWindow::InitUI()
 	}
 	ui->remainCount->setText(QString::number(m_RemainCount));
 
+	m_SrcData.clear();
 }
 
 void MainWindow::on_actionNew_triggered()
@@ -219,6 +220,7 @@ void MainWindow::on_dataButton_clicked()
 			, tr("File isn't exist. Check a file."));
 		return;
 	}
+	m_SrcData = m_CSV->GetSrcData();
 
 	// 충분한 데이타를 입력받기 위해서 최소 5회차의 입력값을 설정
 	for (int i = m_CSV->GetSrcData().firstKey(); i <= m_CSV->GetSrcData().lastKey() - 5; i++) {
@@ -294,14 +296,32 @@ void MainWindow::Analyze()
 	condition.insert(3, ui->cbPeriod->isChecked());
 	condition.insert(4, ui->cbSniffling->isChecked());
 	condition.insert(5, ui->cbContinue->isChecked());
-	m_Lotto->GenerateInfo(condition, m_CSV->GetSrcData());
+	m_Lotto->GenerateInfo(condition, m_SrcData);
 
 	QList<int> lotto = m_Lotto->ExportData();
+
 	ui->lotto0->setText(QString::number(lotto.at(0)));
 	ui->lotto1->setText(QString::number(lotto.at(1)));
 	ui->lotto2->setText(QString::number(lotto.at(2)));
 	ui->lotto3->setText(QString::number(lotto.at(3)));
 	ui->lotto4->setText(QString::number(lotto.at(4)));
 	ui->lotto5->setText(QString::number(lotto.at(5)));
+
+	// 과거 당첨확인 조회 (보너스 번호 제외)
+	bool ret = m_CSV->ReadFile(m_CSVFileName, false);
+	if (!ret) {
+		QMessageBox::warning(this
+			, tr(QCoreApplication::applicationName().toStdString().c_str())
+			, tr("File isn't exist. Check a file."));
+		return;
+	}
+	m_SrcData = m_CSV->GetSrcData();
+
+	QList<int> keys = m_SrcData.keys(lotto);
+	if (!keys.isEmpty()) {
+		QMessageBox::warning(this
+			, tr(QCoreApplication::applicationName().toStdString().c_str())
+			, tr("Congratulations. The %1 th").arg(keys.at(0)));
+	}
 
 }

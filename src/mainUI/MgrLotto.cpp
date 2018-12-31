@@ -150,6 +150,7 @@ QList<int> MgrLotto::ExportData()
 			m_LottoList.append(tempList[random]);
 		}
 	}
+	qSort(m_LottoList);
 
 	return m_LottoList;
 }

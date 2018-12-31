@@ -13,6 +13,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QtCore/QMap>
+#include <QtCore/QList>
 
 namespace Ui {
 	class MainWindow;
@@ -61,14 +63,19 @@ private:
 
 	void ConnectSignalsToSlots();
 
-	QString		m_LastFolderOpen;
-	QString		m_CSVFileName;
+	bool OnCheckLimited();
 
-	int			m_RemainCount;
-	int			m_WeekNumber;
 
-	MgrCSV		*m_CSV;
-	MgrLotto	*m_Lotto;
+	QString						m_LastFolderOpen;
+	QString						m_CSVFileName;
+
+	int							m_RemainCount;
+	int							m_WeekNumber;
+
+	MgrCSV						*m_CSV;
+	MgrLotto					*m_Lotto;
+
+	QMap<int, QList<int>>		m_SrcData;
 
     Ui::MainWindow *ui; 
 };
