@@ -25,7 +25,7 @@
 
 static const QString SETTINGS_GROUP = "mainWindow";
 
-const int REMAIN_COUNT = 5;
+const int REMAIN_COUNT = 100;
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -342,7 +342,8 @@ bool MainWindow::OnCheckLimited()
 	LimitDate* limitDate = new LimitDate();
 	if (limitDate->CheckExpiredDate()) {
 		QDate date = limitDate->GetExpiredDate();
-		QMessageBox::critical(this, tr(QCoreApplication::applicationName().toStdString().c_str())
+		QMessageBox::critical(this
+			, tr(QCoreApplication::applicationName().toStdString().c_str())
 			, tr("The function has expired. %1.%2.%3").arg(date.year()).arg(date.month()).arg(date.day()));
 
 		ret = false;
