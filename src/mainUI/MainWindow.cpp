@@ -285,6 +285,8 @@ void MainWindow::Analyze()
 
 	if (!OnCheckLimited()) { return; }
 
+	QApplication::setOverrideCursor(Qt::WaitCursor);
+
 	if (!m_Lotto) {
 		m_Lotto = new MgrLotto();
 	}
@@ -311,6 +313,8 @@ void MainWindow::Analyze()
 	ui->lotto3->setText(QString::number(lotto.at(3)));
 	ui->lotto4->setText(QString::number(lotto.at(4)));
 	ui->lotto5->setText(QString::number(lotto.at(5)));
+
+	QApplication::restoreOverrideCursor();
 
 	// 과거 당첨확인 조회 (보너스 번호 제외)
 	bool ret = m_CSV->ReadFile(m_CSVFileName, false);
