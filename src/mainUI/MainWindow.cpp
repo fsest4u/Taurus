@@ -74,8 +74,8 @@ void MainWindow::ReadSettings()
 	// The last folder used for saving and opening files
 	m_LastFolderOpen = settings.value("lastfolderopen", QDir::homePath()).toString();
 	m_CSVFileName = settings.value("lastcsvfile", QDir::homePath()).toString();
-	m_WeekNumber = settings.value("weeknumber", QDate::currentDate().weekNumber()).toInt();
-	m_RemainCount = settings.value("count", REMAIN_COUNT).toInt();
+	m_WeekNumber = settings.value("weeknumber", QDate::currentDate().weekNumber()).toByteArray().toInt();
+	m_RemainCount = settings.value("count", REMAIN_COUNT).toByteArray().toInt();
 
 	ui->rbBonusOn->setChecked(settings.value("bbonus", false).toBool());
 	ui->rbBonusOff->setChecked(!settings.value("bbonus", false).toBool());
@@ -97,11 +97,12 @@ void MainWindow::WriteSettings()
 	// The size of the window and it's full screen status
 	settings.setValue("geometry", saveGeometry());
 
+	QByteArray temp;
 	// The last folders used for saving and opening files
 	settings.setValue("lastfolderopen", m_LastFolderOpen);
 	settings.setValue("lastcsvfile", m_CSVFileName);
-	settings.setValue("weeknumber", m_WeekNumber);
-	settings.setValue("count", m_RemainCount);
+	settings.setValue("weeknumber", temp.setNum(m_WeekNumber));
+	settings.setValue("count", temp.setNum(m_RemainCount));
 
 	settings.setValue("bbonus", ui->rbBonusOn->isChecked());
 	settings.setValue("bnumber", ui->cbNumber->isChecked());
