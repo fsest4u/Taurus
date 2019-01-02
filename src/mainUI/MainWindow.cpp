@@ -228,7 +228,7 @@ void MainWindow::on_dataButton_clicked()
 	for (int i = m_CSV->GetSrcData().firstKey(); i <= m_CSV->GetSrcData().lastKey() - 5; i++) {
 		ui->cbStart->addItem(QString("%1").arg(i), i);
 	}
-	for (int i = m_CSV->GetSrcData().firstKey(); i <= m_CSV->GetSrcData().lastKey(); i++) {
+	for (int i = m_CSV->GetSrcData().firstKey() + 5; i <= m_CSV->GetSrcData().lastKey(); i++) {
 		ui->cbEnd->addItem(QString("%1").arg(i), i);
 	}
 	ui->cbStart->setCurrentIndex(ui->cbStart->count() - 1);
@@ -248,18 +248,18 @@ void MainWindow::ConnectSignalsToSlots()
 void MainWindow::SetStartTurn(int index)
 {
 	// 시작, 끝 차이가 최소 5회차
+	qDebug() << "SetStartTurn() end current " << ui->cbEnd->currentIndex() << ", start index " << index;
 	if (ui->cbEnd->currentIndex() < index) {
-		int temp = qMin(index + 5, ui->cbEnd->count() - 1);
-		ui->cbEnd->setCurrentIndex(temp);
+		ui->cbEnd->setCurrentIndex(index);
 	}
 }
 
 void MainWindow::SetEndTurn(int index)
 {
 	// 시작, 끝 차이가 최소 5회차
+	qDebug() << "SetEndTurn() start current " << ui->cbStart->currentIndex() << ", end index " << index;
 	if (ui->cbStart->currentIndex() > index) {
-		int temp = qMax(index - 5, 0);
-		ui->cbStart->setCurrentIndex(temp);
+		ui->cbStart->setCurrentIndex(index);
 	}
 }
 
