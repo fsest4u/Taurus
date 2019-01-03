@@ -6,7 +6,7 @@
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 #define TaurusID        "39B382FF-28F5-4B8E-B977-C669D2F272F9"
-#define TaurusVersion   "0.0.1"
+#define TaurusVersion   "1.0.0"
 
 #define TaurusName      "Taurus¢ç Lotto Analyzer"
 #define TaurusDirName   "Taurus"
