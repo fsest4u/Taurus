@@ -84,7 +84,36 @@ void StatColor::Generate(QMap<int, QList<int>> srcData, bool bBonus, int start, 
 
 QList<int> StatColor::GetList(QList<int> baseList)
 {
+	int amount = m_Stat3.count();
+
+	m_Ret.clear();
+	QMapIterator<int, int> iterator2(m_Stat4);
+	iterator2.toBack();
+	while (iterator2.hasPrevious()) {
+		iterator2.previous();
+
+		int avg = iterator2.key() * 100 / amount;
+		// 구할 항목 개수와 전체 항목 개수를 비교하여 제일 작은 값으로 설정
+		int count = qMin(baseList.count() - 5, ARRAY_SIZE_COLOR) * avg / 100;
+		//qDebug() << "[GetList]  NumberArea : " << iterator2.value() << ", count : " << count;
+		for (QList<int>::const_iterator iter = baseList.constBegin(); iter != baseList.constEnd(); ++iter) {
+
+			if (count <= 0) break;
+
+			if (*iter >= iterator2.value() && *iter < iterator2.value() + 10) {
+				m_Ret.append(*iter);
+				count--;
+			}
+		}
+	}
+
+	return m_Ret;
+}
+
+QList<int> StatColor::GetListRandom(QList<int> baseList)
+{
 	SettingData settings;
+	int limitCount = 10000;
 
 	int amount = m_Stat3.count();
 
@@ -97,12 +126,11 @@ QList<int> StatColor::GetList(QList<int> baseList)
 		int avg = iterator2.key() * 100 / amount;
 		// 구할 항목 개수와 전체 항목 개수를 비교하여 제일 작은 값으로 설정
 		int count = qMin(baseList.count() - 5, ARRAY_SIZE_COLOR) * avg / 100;
-		qDebug() << "[StatColor]  NumberArea : " << iterator2.value() << ", count : " << count;
-		//for (QList<int>::const_iterator iter = baseList.constBegin(); iter != baseList.constEnd(); ++iter) {
-		while(count > 0) {
+		//qDebug() << "[GetListRandom]  NumberArea : " << iterator2.value() << ", count : " << count;
+		while (count > 0 && limitCount > 0) {
+			limitCount--;
 
 			int random = settings.RandInt(0, baseList.count() - 1);
-			//if (count <= 0) break;
 
 			if (baseList.at(random) >= iterator2.value()
 				&& baseList.at(random) < iterator2.value() + 10
@@ -111,92 +139,12 @@ QList<int> StatColor::GetList(QList<int> baseList)
 				count--;
 			}
 		}
+
+		if (count > 0) {
+			m_Ret.clear();
+		}
 	}
 
 	return m_Ret;
 }
-
-//void StatColor::Generate_old(QMap<int, QList<int>> srcData, bool bBonus, int start, int end)
-//{
-//	qDebug() << "StatColor::Generate()";
-//	m_Stat1.clear();
-//	m_Stat2.clear();
-//
-//	QMapIterator<int, QList<int>> iterator1(srcData);
-//	while (iterator1.hasNext()) {
-//		iterator1.next();
-//		// 회차 조건
-//		if (iterator1.key() < start || iterator1.key() > end) { continue; }
-//
-//		QList<int> numData = iterator1.value();
-//		// 보너스 조건
-//		if (!bBonus) { numData.pop_back(); }
-//
-//		QMap<int, int> tempData;
-//		tempData.clear();
-//		int count = 0;
-//
-//		for (QList<int>::const_iterator iter = numData.cbegin(); iter != numData.constEnd(); ++iter) {
-//			if (*iter <= MgrLotto::UNIT_10_10) {
-//				count = tempData.value(MgrLotto::UNIT_10_1, 0);
-//				tempData.insert(MgrLotto::UNIT_10_1, ++count);
-//			}
-//			else if (*iter <= MgrLotto::UNIT_10_20) {
-//				count = tempData.value(MgrLotto::UNIT_10_10, 0);
-//				tempData.insert(MgrLotto::UNIT_10_10, ++count);
-//			}
-//			else if (*iter <= MgrLotto::UNIT_10_30) {
-//				count = tempData.value(MgrLotto::UNIT_10_20, 0);
-//				tempData.insert(MgrLotto::UNIT_10_20, ++count);
-//			}
-//			else if (*iter <= MgrLotto::UNIT_10_40) {
-//				count = tempData.value(MgrLotto::UNIT_10_30, 0);
-//				tempData.insert(MgrLotto::UNIT_10_30, ++count);
-//			}
-//			else {
-//				count = tempData.value(MgrLotto::UNIT_10_40, 0);
-//				tempData.insert(MgrLotto::UNIT_10_40, ++count);
-//			}
-//		}
-//
-//		// 색상별
-//		m_Stat1.insert(iterator1.key(), tempData);
-//		// 색상별 합계
-//		int total = 0;
-//		QMapIterator<int, int> iterator2(tempData);
-//		while (iterator2.hasNext()) {
-//			iterator2.next();
-//			total = m_Stat2.value(iterator2.key(), 0);
-//			m_Stat2.insert(iterator2.key(), iterator2.value() + total);
-//		}
-//	}
-//
-//	// for debug
-//	QMapIterator<int, QMap<int, int>> iterator3(m_Stat1);
-//	while (iterator3.hasNext()) {
-//		iterator3.next();
-//		QMapIterator<int, int> val(iterator3.value());
-//		while (val.hasNext()) {
-//			val.next();
-//			qDebug() << "[iterator3] iterator3.key : " << iterator3.key() << ", key : " << val.key() << ", value : " << val.value();
-//		}
-//	}
-//	qDebug() << "=======================";
-//	QMapIterator<int, int> iterator4(m_Stat2);
-//	int amount = 0;
-//	while (iterator4.hasNext()) {
-//		iterator4.next();
-//		amount += iterator4.value();
-//		qDebug() << "[iterator4] key : " << iterator4.key() << ", value : " << iterator4.value();
-//	}
-//	qDebug() << "======================= amount : " << amount;
-//	QMapIterator<int, int> iterator5(m_Stat2);
-//	while (iterator5.hasNext()) {
-//		iterator5.next();
-//		double avg = iterator5.value() * 100 / amount;
-//		//qDebug() << "[iterator5] key : " << iterator5.key() << ", value : " << iterator5.value() << ", percent : " << QString("Total Amount : %L1").arg(avg, 0, 'f', 0);
-//		qDebug() << "[iterator5] key : " << iterator5.key() << ", value : " << iterator5.value() << ", percent : " << avg;
-//	}
-//
-//}
 

@@ -29,8 +29,8 @@ public:
 	~StatColor();
 
 	void Generate(QMap<int, QList<int>> srcData, bool bBonus = true, int start = 1, int end = 1);
-	//void Generate_old(QMap<int, QList<int>> srcData, bool bBonus = true, int start = 1, int end = 1);
 	QList<int> GetList(QList<int>);
+	QList<int> GetListRandom(QList<int>);
 
 
 
