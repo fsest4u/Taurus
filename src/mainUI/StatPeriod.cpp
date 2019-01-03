@@ -62,22 +62,46 @@ void StatPeriod::Generate(QMap<int, QList<int>> srcData, bool bBonus, int lastwe
 
 QList<int> StatPeriod::GetList()
 {
+	m_Ret.clear();
+	int count = ARRAY_SIZE_PERIOD;
+
+	QMapIterator<int, bool> iterator2(m_Stat1);
+	while (iterator2.hasNext()) {
+
+		if (count <= 0) break;
+
+		iterator2.next();
+		if (iterator2.value() && !m_Ret.contains(iterator2.key())) {
+			//qDebug() << "[StatPeriod] Number : " << iterator2.key() << ", Not appearing : " << iterator2.value();
+			m_Ret.append(iterator2.key());
+			count--;
+		}
+	}
+
+	return m_Ret;
+}
+
+QList<int> StatPeriod::GetListRandom()
+{
 	SettingData settings;
+	int limitCount = 10000;
 
 	m_Ret.clear();
 	int count = ARRAY_SIZE_PERIOD;
 
-	while (count > 0) {
+	while (count > 0 && limitCount > 0) {
+		limitCount--;
 
 		int random = settings.RandInt(0, m_Stat1.count() - 1);
 
-		if (m_Stat1.value(random)) {
+		if (m_Stat1.value(random) && !m_Ret.contains(random)) {
 			//qDebug() << "[StatPeriod] Number : " << random << ", Not appearing : " << true;
-			if (!m_Ret.contains(random)) {
-				m_Ret.append(random);
-				count--;
-			}
+			m_Ret.append(random);
+			count--;
 		}
+	}
+	if (count > 0) {
+		m_Ret.clear();
 	}
 
 	return m_Ret;

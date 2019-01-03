@@ -31,6 +31,7 @@ public:
 
 	void Generate(QMap<int, QList<int>> srcData, bool bBonus = true, int lastweek = MgrLotto::TURN_WEEK_5);
 	QList<int> GetList();
+	QList<int> GetListRandom();
 
 
 private slots:
