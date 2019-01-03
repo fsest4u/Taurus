@@ -95,9 +95,9 @@ QDate LimitDate::DecryptDate(QByteArray data)
 	TinyAES aes;
 	QByteArray temp = aes.Decrypt(data, GetKey());
 	QDate date = QDate::fromJulianDay(temp.toLongLong());
-	qDebug() << "Before Decrypt Date is =>" << data;
-	qDebug() << "After Decrypt String is =>" << temp;
-	qDebug() << "After Decrypt Date is =>" << date;
+	//qDebug() << "Before Decrypt Date is =>" << data;
+	//qDebug() << "After Decrypt String is =>" << temp;
+	//qDebug() << "After Decrypt Date is =>" << date;
 
 	return date;
 }
@@ -107,9 +107,9 @@ QByteArray LimitDate::EncryptDate(QDate date)
 	TinyAES aes;
 	QString temp = QString::number(date.toJulianDay());
 	QByteArray encrypt = aes.Encrypt(temp.toLatin1(), GetKey());
-	qDebug() << "Before Encrypt Date is =>" << date;
-	qDebug() << "Before Encrypt String is =>" << temp;
-	qDebug() << "After Encrypt Date is =>" << encrypt;
+	//qDebug() << "Before Encrypt Date is =>" << date;
+	//qDebug() << "Before Encrypt String is =>" << temp;
+	//qDebug() << "After Encrypt Date is =>" << encrypt;
 
 	return encrypt;
 }
@@ -125,7 +125,7 @@ QByteArray LimitDate::GetKey()
 	}
 	QByteArray retKey = QCryptographicHash::hash(address.toUtf8(), QCryptographicHash::Md5);
 	retKey.resize(KEY_SIZE);
-	qDebug() << "Key is =>" << retKey;
+	//qDebug() << "Key is =>" << retKey;
 	return retKey;
 }
 
@@ -145,15 +145,15 @@ bool LimitDate::CheckExpiredDate()
 	bool bExpired = false;
 	QDate cDate = QDate::currentDate();
 
-	qDebug() << "**************************************";
-	qDebug() << "Expire  => " << m_ExpiredDate.day() << "." << m_ExpiredDate.month() << "." << m_ExpiredDate.year();
-	qDebug() << "Excute  => " << m_LastExecuteDate.day() << "." << m_LastExecuteDate.month() << "." << m_LastExecuteDate.year();
-	qDebug() << "Current => " << cDate.day() << "." << cDate.month() << "." << cDate.year();
+	//qDebug() << "**************************************";
+	//qDebug() << "Expire  => " << m_ExpiredDate.day() << "." << m_ExpiredDate.month() << "." << m_ExpiredDate.year();
+	//qDebug() << "Excute  => " << m_LastExecuteDate.day() << "." << m_LastExecuteDate.month() << "." << m_LastExecuteDate.year();
+	//qDebug() << "Current => " << cDate.day() << "." << cDate.month() << "." << cDate.year();
 
 	if (m_ExpiredDate.toJulianDay() == 0 || m_LastExecuteDate.toJulianDay() == 0) {
 		bExpired = true;
-		qDebug() << "Function is " << (bExpired ? "Expired." : "not Expired.");
-		qDebug() << "**************************************";
+		//qDebug() << "Function is " << (bExpired ? "Expired." : "not Expired.");
+		//qDebug() << "**************************************";
 		return bExpired;
 	}
 
@@ -161,8 +161,8 @@ bool LimitDate::CheckExpiredDate()
 		bExpired = true;
 	}
 
-	qDebug() << "Function is " << (bExpired ? "Expired." : "not Expired.");
-	qDebug() << "**************************************";
+	//qDebug() << "Function is " << (bExpired ? "Expired." : "not Expired.");
+	//qDebug() << "**************************************";
 
 	m_LastExecuteDate = qMax(cDate, m_LastExecuteDate);
 

@@ -187,8 +187,8 @@ QByteArray TinyAES::Encrypt(QByteArray b_input, QByteArray p_key, QByteArray p_i
 
         unsigned char * key = (unsigned char *)malloc(keySize);
         QByteArrayToUCharArray(p_key, key);
-		qDebug() << "TinyAES::p_key is => " << p_key;
-		qDebug() << "TinyAES::key is => " << key;
+		//qDebug() << "TinyAES::p_key is => " << p_key;
+		//qDebug() << "TinyAES::key is => " << key;
 
         unsigned char * iv = (unsigned char *)malloc(ivSize);
         QByteArrayToUCharArray(p_iv, iv);
