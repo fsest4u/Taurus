@@ -158,7 +158,6 @@ bool MgrLotto::GenerateInfo(QList<bool> condition, QMap<int, QList<int>> srcData
 	}
 	// todo
 	if (condition.at(CON_COUTINUE)) {
-		m_ProgressWidget->SetValue(CON_COUTINUE, CON_COUTINUE, QString("continue"));
 
 		StatContinue conti;
 		conti.Generate(srcData, false, m_StartTurn, m_EndTurn);

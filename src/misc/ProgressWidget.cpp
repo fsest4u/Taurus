@@ -39,11 +39,11 @@ void ProgressWidget::InitProgress(QString title, int min, int max, double curInd
 	}
 	m_Progress = new QProgressDialog();
 	m_Progress->setMinimumDuration(100);
-	m_Progress->setMinimum(min);
-	m_Progress->setMaximum(max);
+	m_Progress->setMinimum(min*1000);
+	m_Progress->setMaximum(max*1000);
 	m_Progress->setValue(0);
 	m_Progress->setAutoClose(true);
-	QString label = "[" + QString::number(curIndex) + "/" + QString::number(maxIndex) + "] " 
+	QString label = "[" + QString::number(curIndex) + "/" + QString::number(maxIndex*1000) + "] " 
 					+ title + QString(" Data %1 ... ").arg(curIndex);
 	m_Progress->setLabelText(label);
 }
@@ -67,13 +67,12 @@ void ProgressWidget::InitProgressSubtitle(QString title, QString subtitle, int m
 
 void ProgressWidget::SetValue(double curIndex, double maxIndex, QString title)
 {
-	m_Progress->setValue(curIndex);
-	QString label = "[" + QString::number(curIndex) + "/" + QString::number(maxIndex) + "] " + title;
-	m_Progress->setLabelText(label);
-	qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-
-	// temp
-	QThread::sleep(1);
+	for (int i = curIndex * 1000; i < (curIndex + 1) * 1000; i++) {
+		m_Progress->setValue(i);
+		QString label = "[" + QString::number(i) + "/" + QString::number(maxIndex * 1000) + "] " + title;
+		m_Progress->setLabelText(label);
+		qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+	}
 }
 
 void ProgressWidget::Accept()
