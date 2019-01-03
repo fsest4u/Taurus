@@ -30,6 +30,7 @@ public:
 
 	void Generate(QMap<int, QList<int>> srcData, bool bBonus = false, int start = 1, int end = 1);
 	QList<int> GetList(QList<int> baseList);
+	QList<int> GetListRandom(QList<int> baseList);
 
 
 
