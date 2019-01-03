@@ -27,6 +27,7 @@ static const QString SETTINGS_GROUP = "mainWindow";
 
 const int REMAIN_COUNT = 100;
 
+const int TURN_COUNT = 15;
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -226,13 +227,13 @@ void MainWindow::on_dataButton_clicked()
 	m_SrcData = m_CSV->GetSrcData();
 
 	// 충분한 데이타를 입력받기 위해서 최소 5회차의 입력값을 설정
-	for (int i = m_CSV->GetSrcData().firstKey(); i <= m_CSV->GetSrcData().lastKey() - 5; i++) {
+	for (int i = m_CSV->GetSrcData().firstKey(); i <= m_CSV->GetSrcData().lastKey() - TURN_COUNT; i++) {
 		ui->cbStart->addItem(QString("%1").arg(i), i);
 	}
-	for (int i = m_CSV->GetSrcData().firstKey() + 5; i <= m_CSV->GetSrcData().lastKey(); i++) {
+	for (int i = m_CSV->GetSrcData().firstKey() + TURN_COUNT; i <= m_CSV->GetSrcData().lastKey(); i++) {
 		ui->cbEnd->addItem(QString("%1").arg(i), i);
 	}
-	ui->cbStart->setCurrentIndex(ui->cbStart->count() - 1);
+	ui->cbStart->setCurrentIndex(0);
 	ui->cbEnd->setCurrentIndex(ui->cbEnd->count() - 1);
 }
 
@@ -248,7 +249,6 @@ void MainWindow::ConnectSignalsToSlots()
 
 void MainWindow::SetStartTurn(int index)
 {
-	// 시작, 끝 차이가 최소 5회차
 	qDebug() << "SetStartTurn() end current " << ui->cbEnd->currentIndex() << ", start index " << index;
 	if (ui->cbEnd->currentIndex() < index) {
 		ui->cbEnd->setCurrentIndex(index);
@@ -257,7 +257,6 @@ void MainWindow::SetStartTurn(int index)
 
 void MainWindow::SetEndTurn(int index)
 {
-	// 시작, 끝 차이가 최소 5회차
 	qDebug() << "SetEndTurn() start current " << ui->cbStart->currentIndex() << ", end index " << index;
 	if (ui->cbStart->currentIndex() > index) {
 		ui->cbStart->setCurrentIndex(index);
@@ -280,12 +279,12 @@ void MainWindow::Analyze()
 			, tr("You have exceeded the number available."));
 		return;
 	}
-	m_RemainCount--;
-	ui->remainCount->setText(QString::number(m_RemainCount));
 
 	if (!OnCheckLimited()) { return; }
 
-	QApplication::setOverrideCursor(Qt::WaitCursor);
+	WriteSettings();
+	m_RemainCount--;
+	ui->remainCount->setText(QString::number(m_RemainCount));
 
 	if (!m_Lotto) {
 		m_Lotto = new MgrLotto();
@@ -303,7 +302,13 @@ void MainWindow::Analyze()
 	condition.insert(3, ui->cbPeriod->isChecked());
 	condition.insert(4, ui->cbSniffling->isChecked());
 	condition.insert(5, ui->cbContinue->isChecked());
-	m_Lotto->GenerateInfo(condition, m_SrcData);
+	bool ret1 = m_Lotto->GenerateInfo(condition, m_SrcData);
+	if (!ret1) {
+		QMessageBox::warning(this
+			, tr(QCoreApplication::applicationName().toStdString().c_str())
+			, tr("Please, Change to analysis conditions."));
+		return;
+	}
 
 	QList<int> lotto = m_Lotto->ExportData();
 
@@ -314,24 +319,22 @@ void MainWindow::Analyze()
 	ui->lotto4->setText(QString::number(lotto.at(4)));
 	ui->lotto5->setText(QString::number(lotto.at(5)));
 
-	QApplication::restoreOverrideCursor();
-
 	// 과거 당첨확인 조회 (보너스 번호 제외)
-	bool ret = m_CSV->ReadFile(m_CSVFileName, false);
-	if (!ret) {
-		QMessageBox::warning(this
-			, tr(QCoreApplication::applicationName().toStdString().c_str())
-			, tr("File isn't exist. Check a file."));
-		return;
-	}
-	m_SrcData = m_CSV->GetSrcData();
+	//bool ret2 = m_CSV->ReadFile(m_CSVFileName, false);
+	//if (!ret2) {
+	//	QMessageBox::warning(this
+	//		, tr(QCoreApplication::applicationName().toStdString().c_str())
+	//		, tr("File isn't exist. Check a file."));
+	//	return;
+	//}
+	//m_SrcData = m_CSV->GetSrcData();
 
-	QList<int> keys = m_SrcData.keys(lotto);
-	if (!keys.isEmpty()) {
-		QMessageBox::warning(this
-			, tr(QCoreApplication::applicationName().toStdString().c_str())
-			, tr("Congratulations. The %1 th").arg(keys.at(0)));
-	}
+	//QList<int> keys = m_SrcData.keys(lotto);
+	//if (!keys.isEmpty()) {
+	//	QMessageBox::warning(this
+	//		, tr(QCoreApplication::applicationName().toStdString().c_str())
+	//		, tr("Congratulations. The %1 th").arg(keys.at(0)));
+	//}
 
 }
 
