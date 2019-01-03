@@ -25,7 +25,7 @@ public:
 
 	void InitProgress(QString title, int min, int max, double curIndex, double totIndex);
 	void InitProgressSubtitle(QString title, QString subtitle, int min, int max, double curIndex, double totIndex);
-	void SetValue(double curIndex);
+	void SetValue(double curIndex = 0, double maxIndex = 0, QString title = "");
 	void Accept();
 
 private slots:

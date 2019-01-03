@@ -10,6 +10,7 @@
 
 #include <QtWidgets/QProgressDialog>
 #include <QtWidgets/QApplication>
+#include <QtCore/QThread>
 
 #include "ProgressWidget.h"
 //#include "gemini_constants.h"
@@ -64,10 +65,15 @@ void ProgressWidget::InitProgressSubtitle(QString title, QString subtitle, int m
 	m_Progress->setLabelText(label);
 }
 
-void ProgressWidget::SetValue(double curIndex)
+void ProgressWidget::SetValue(double curIndex, double maxIndex, QString title)
 {
 	m_Progress->setValue(curIndex);
+	QString label = "[" + QString::number(curIndex) + "/" + QString::number(maxIndex) + "] " + title;
+	m_Progress->setLabelText(label);
 	qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+
+	// temp
+	QThread::sleep(1);
 }
 
 void ProgressWidget::Accept()
