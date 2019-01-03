@@ -13,10 +13,11 @@
 #define MGR_LOTTO_H
 
 #include <QtCore/QObject>
+#include <QtWidgets/QWidget>
 
 class ProgressWidget;
 
-class MgrLotto : public QObject
+class MgrLotto : public QWidget
 {
 	Q_OBJECT
 
@@ -59,7 +60,7 @@ public:
 	~MgrLotto();
 
 	void SetPreference(bool bBonus = true, int start = 1, int end = 5, int lastweek = TURN_WEEK_5);
-	void GenerateInfo(QList<bool> condition, QMap<int, QList<int>> srcData);
+	bool GenerateInfo(QList<bool> condition, QMap<int, QList<int>> srcData);
 
 	QList<int> ExportData();
 

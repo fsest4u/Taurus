@@ -9,6 +9,8 @@
 *************************************************************************/
 
 #include <QtDebug>
+#include <QtWidgets/QMessageBox>
+#include <QtWidgets/QApplication>
 
 #include "misc/ProgressWidget.h"
 #include "misc/SettingData.h"
@@ -40,79 +42,132 @@ MgrLotto::~MgrLotto()
 
 void MgrLotto::SetPreference(bool bBonus, int start, int end, int lastweek)
 {
-	qDebug() << "SetPreference() bonus : " << bBonus << 
-		", start : " << start << 
-		", end : " << end << 
-		", lastweek : " << lastweek;
+	//qDebug() << "SetPreference() bonus : " << bBonus << 
+	//	", start : " << start << 
+	//	", end : " << end << 
+	//	", lastweek : " << lastweek;
 	m_bBonus = bBonus;
 	m_StartTurn = start;
 	m_EndTurn = end;
 	m_LastWeek = lastweek;
 }
 
-void MgrLotto::GenerateInfo(QList<bool> condition, QMap<int, QList<int>> srcData)
+bool MgrLotto::GenerateInfo(QList<bool> condition, QMap<int, QList<int>> srcData)
 {
+	QApplication::setOverrideCursor(Qt::WaitCursor);
+	m_ProgressWidget->InitProgress("Analyze Data", CON_NUMBER, CON_COUTINUE, CON_NUMBER, CON_COUTINUE);
+
+	m_ProgressWidget->SetValue(CON_NUMBER, CON_COUTINUE, QString("number"));
 	// 순차적으로 설정
 	if (condition.at(CON_NUMBER)) {
 		StatNumber number;
 		number.Generate(srcData, m_bBonus, m_StartTurn, m_EndTurn);
 		m_BaseList = number.GetList();
 		// for debug
-		qDebug() << "=== list count " << m_BaseList.count();
+		qDebug() << "[CON_NUMBER] count : " << m_BaseList.count();
+		if (m_BaseList.count() <= 0) {
+			QMessageBox::warning(this
+				, tr(QCoreApplication::applicationName().toStdString().c_str())
+				, tr("Please, Retry to analyze. (Not enough data, CON_NUMBER)"));
+			QApplication::restoreOverrideCursor();
+			return false;
+		}
 		for (QList<int>::const_iterator iter = m_BaseList.cbegin(); iter != m_BaseList.constEnd(); ++iter) {
-			qDebug() << "=== CON_NUMBER " << *iter;
+			qDebug() << "[CON_NUMBER] " << *iter;
 		}
 	}
-	// 랜덤하게 설정
+	// 순차적으로 설정
 	if (condition.at(CON_COLOR)) {
+		m_ProgressWidget->SetValue(CON_COLOR, CON_COUTINUE, QString("color"));
+
 		StatColor color;
 		color.Generate(srcData, true, m_StartTurn, m_EndTurn);
 		m_BaseList = color.GetList(m_BaseList);
 		// for debug
-		qDebug() << "=== list count " << m_BaseList.count();
+		qDebug() << "[CON_COLOR] count : " << m_BaseList.count();
+		if (m_BaseList.count() <= 0) {
+			QMessageBox::warning(this
+				, tr(QCoreApplication::applicationName().toStdString().c_str())
+				, tr("Please, Retry to analyze. (Not enough data, CON_COLOR)"));
+			QApplication::restoreOverrideCursor();
+			return false;
+		}
 		for (QList<int>::const_iterator iter = m_BaseList.cbegin(); iter != m_BaseList.constEnd(); ++iter) {
-			qDebug() << "=== CON_COLOR " << *iter;
+			qDebug() << "[CON_COLOR] " << *iter;
 		}
 	}
-	// 랜덤하게 설정
+	// 순차적으로 설정
 	if (condition.at(CON_SECTION)) {
+		m_ProgressWidget->SetValue(CON_SECTION, CON_COUTINUE, QString("section"));
+
 		StatSection section;
 		section.Generate(srcData, true, m_LastWeek);
 		m_BaseList = section.GetList(m_BaseList);
 		// for debug
-		qDebug() << "=== list count " << m_BaseList.count();
+		qDebug() << "[CON_SECTION] count : " << m_BaseList.count();
+		if (m_BaseList.count() <= 0) {
+			QMessageBox::warning(this
+				, tr(QCoreApplication::applicationName().toStdString().c_str())
+				, tr("Please, Retry to analyze. (Not enough data, CON_SECTION)"));
+			QApplication::restoreOverrideCursor();
+			return false;
+		}
 		for (QList<int>::const_iterator iter = m_BaseList.cbegin(); iter != m_BaseList.constEnd(); ++iter) {
-			qDebug() << "=== CON_SECTION " << *iter;
+			qDebug() << "[CON_SECTION] " << *iter;
 		}
 	}
 	// 랜덤하게 설정
 	if (condition.at(CON_SNIFFLING)) {
+		m_ProgressWidget->SetValue(CON_PERIOD, CON_COUTINUE, QString("period"));
+
 		StatSniffling sniffling;
 		sniffling.Generate(srcData, false, m_StartTurn, m_EndTurn);
-		m_BaseList = sniffling.GetList(m_BaseList);
+		m_BaseList = sniffling.GetListRandom(m_BaseList);
 		// for debug
-		qDebug() << "=== list count " << m_BaseList.count();
+		qDebug() << "[CON_SNIFFLING] count : " << m_BaseList.count();
+		if (m_BaseList.count() <= 0) {
+			QMessageBox::warning(this
+				, tr(QCoreApplication::applicationName().toStdString().c_str())
+				, tr("Please, Retry to analyze. (Not enough data, CON_SNIFFLING)"));
+			QApplication::restoreOverrideCursor();
+			return false;
+		}
 		for (QList<int>::const_iterator iter = m_BaseList.cbegin(); iter != m_BaseList.constEnd(); ++iter) {
-			qDebug() << "=== CON_SNIFFLING " << *iter;
+			qDebug() << "[CON_SNIFFLING] " << *iter;
 		}
 	}
 	// 랜덤하게 설정
 	if (condition.at(CON_PERIOD)) {
+		m_ProgressWidget->SetValue(CON_SNIFFLING, CON_COUTINUE, QString("sniffling"));
+
 		StatPeriod period;
 		period.Generate(srcData, true, m_LastWeek);
-		m_PeriodList = period.GetList();
+		m_PeriodList = period.GetListRandom();
 		// for debug
-		qDebug() << "=== list count " << m_PeriodList.count();
+		qDebug() << "=== CON_PERIOD count " << m_PeriodList.count();
+		if (m_PeriodList.count() <= 0) {
+			QMessageBox::warning(this
+				, tr(QCoreApplication::applicationName().toStdString().c_str())
+				, tr("Please, Retry to analyze. (Not enough data, CON_PERIOD)"));
+			QApplication::restoreOverrideCursor();
+			return false;
+		}
 		for (QList<int>::const_iterator iter = m_PeriodList.cbegin(); iter != m_PeriodList.constEnd(); ++iter) {
 			qDebug() << "=== CON_PERIOD " << *iter;
 		}
 	}
 	// todo
 	if (condition.at(CON_COUTINUE)) {
+		m_ProgressWidget->SetValue(CON_COUTINUE, CON_COUTINUE, QString("continue"));
+
 		StatContinue conti;
 		conti.Generate(srcData, false, m_StartTurn, m_EndTurn);
 		conti.GetList();
 	}
+	m_ProgressWidget->Accept();
+
+	QApplication::restoreOverrideCursor();
+	return true;
 }
 
 
@@ -133,9 +188,9 @@ QList<int> MgrLotto::ExportData()
 		}
 	}
 	// for debug
-	qDebug() << "=== list count " << m_BaseList.count();
+	qDebug() << "[TEMP_LIST] count : " << tempList.count();
 	for (QList<int>::const_iterator iter = tempList.cbegin(); iter != tempList.constEnd(); ++iter) {
-		qDebug() << "=== tempList " << *iter;
+		qDebug() << "[TEMP_LIST] " << *iter;
 	}
 
 	m_LottoList.clear();
@@ -144,9 +199,9 @@ QList<int> MgrLotto::ExportData()
 
 		// 랜덤하게 설정
 		int random = settings.RandInt(0, tempList.count() - 1);
-		qDebug() << "random " << random;
+		//qDebug() << "random " << random;
 		if (!m_LottoList.contains(tempList[random])) {
-			qDebug() << "lotto number " << tempList[random];
+			//qDebug() << "lotto number " << tempList[random];
 			m_LottoList.append(tempList[random]);
 		}
 	}
