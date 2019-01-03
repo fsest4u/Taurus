@@ -30,8 +30,8 @@ public:
 	~StatSection();
 
 	void Generate(QMap<int, QList<int>> srcData, bool bBonus = true, int lastweek = MgrLotto::TURN_WEEK_5);
-	//void Generate_old(QMap<int, QList<int>> srcData, bool bBonus = true, int lastweek = MgrLotto::TURN_WEEK_5);
 	QList<int> GetList(QList<int> baseList);
+	QList<int> GetListRandom(QList<int> baseList);
 
 private slots:
 
