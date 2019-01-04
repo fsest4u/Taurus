@@ -25,9 +25,9 @@
 
 static const QString SETTINGS_GROUP = "mainWindow";
 
-const int REMAIN_COUNT = 100;
+const int REMAIN_COUNT = 20;
 
-const int TURN_COUNT = 15;
+const int TURN_COUNT = 20;
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
