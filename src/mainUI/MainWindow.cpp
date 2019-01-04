@@ -125,6 +125,9 @@ void MainWindow::InitUI()
 	ui->actionOpen->setVisible(false);
 	ui->actionSave->setVisible(false);
 
+	ui->cbNumber->setVisible(false);
+	ui->cbContinue->setVisible(false);
+
 	ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Analyze"));
 
 	ConnectSignalsToSlots();
@@ -210,7 +213,7 @@ void MainWindow::on_dataButton_clicked()
 		QMessageBox::warning(this
 			, tr(QCoreApplication::applicationName().toStdString().c_str())
 			, tr("Please, Select a data file."));
-
+		return;
 	}
 
 	if (!m_CSV) {
