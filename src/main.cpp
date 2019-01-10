@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
 	QCoreApplication::setOrganizationName("");
 	QCoreApplication::setOrganizationDomain("");
 	QCoreApplication::setApplicationName("Taurus");
-	QCoreApplication::setApplicationVersion("1.0.0");
+	QCoreApplication::setApplicationVersion("1.0.1");
 
 	app.setAttribute(Qt::AA_UseHighDpiPixmaps);
 

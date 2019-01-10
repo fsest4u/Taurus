@@ -125,16 +125,17 @@ void MainWindow::InitUI()
 	ui->actionOpen->setVisible(false);
 	ui->actionSave->setVisible(false);
 
+	ui->dataFilepath->setText("");
+
 	ui->cbNumber->setVisible(false);
 	ui->cbContinue->setVisible(false);
 
-	ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Analyze"));
-
-	ConnectSignalsToSlots();
-
-	ui->dataFilepath->setText("");
-
 	ui->cbNumber->setChecked(true);
+	ui->cbColor->setChecked(true);
+	ui->cbSection->setChecked(true);
+	ui->cbPeriod->setChecked(true);
+	ui->cbSniffling->setChecked(true);
+	ui->cbContinue->setChecked(true);
 
 	ui->cbLastWeek->addItem(tr("5 Week"), MgrLotto::TURN_WEEK_5);
 	ui->cbLastWeek->addItem(tr("10 Week"), MgrLotto::TURN_WEEK_10);
@@ -149,7 +150,11 @@ void MainWindow::InitUI()
 	}
 	ui->remainCount->setText(QString::number(m_RemainCount));
 
+	ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Analyze"));
+
 	m_SrcData.clear();
+
+	ConnectSignalsToSlots();
 }
 
 void MainWindow::on_actionNew_triggered()
