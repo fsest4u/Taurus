@@ -34,7 +34,7 @@ StatSniffling::~StatSniffling()
 
 void StatSniffling::Generate(QMap<int, QList<int>> srcData, bool bBonus, int start, int end)
 {
-	qDebug() << "StatSniffling::Generate()";
+	//qDebug() << "StatSniffling::Generate()";
 	m_Stat1.clear();
 
 	QMapIterator<int, QList<int>> iterator1(srcData);
@@ -106,9 +106,9 @@ void StatSniffling::Generate(QMap<int, QList<int>> srcData, bool bBonus, int sta
 	iterator4.toBack();
 	while (iterator4.hasPrevious()) {
 		iterator4.previous();
-		qDebug() << "[StatSniffling] Win : " << iterator4.key()
-			<< ", Odd : " << iterator4.value().at(SNIFFLING_COUNT)
-			<< ", Average : " << iterator4.value().at(SNIFFLING_TOTAL);
+		//qDebug() << "[StatSniffling] Win : " << iterator4.key()
+		//	<< ", Odd : " << iterator4.value().at(SNIFFLING_COUNT)
+		//	<< ", Average : " << iterator4.value().at(SNIFFLING_TOTAL);
 
 	}
 }
@@ -121,9 +121,9 @@ QList<int> StatSniffling::GetList(QList<int> baseList)
 	iterator4.toBack();
 	while (iterator4.hasPrevious()) {
 		iterator4.previous();
-		qDebug() << "[StatSniffling] Win : " << iterator4.key()
-			<< ", Odd : " << iterator4.value().at(SNIFFLING_COUNT)
-			<< ", Average : " << iterator4.value().at(SNIFFLING_TOTAL);
+		//qDebug() << "[StatSniffling] Win : " << iterator4.key()
+		//	<< ", Odd : " << iterator4.value().at(SNIFFLING_COUNT)
+		//	<< ", Average : " << iterator4.value().at(SNIFFLING_TOTAL);
 	
 		int countOdd = 0;
 		// 전체 항목의 홀수 개수 체크
@@ -133,17 +133,17 @@ QList<int> StatSniffling::GetList(QList<int> baseList)
 			}
 		}
 		int countEvent = baseList.count() - countOdd;
-		qDebug() << "[StatSniffling] countOdd : " << countOdd << ", countEvent : " << countEvent;
+		//qDebug() << "[StatSniffling] countOdd : " << countOdd << ", countEvent : " << countEvent;
 
 
 		int avgOdd = iterator4.value().at(SNIFFLING_COUNT) * 100 / amount;
 		int avgEven = 100 - avgOdd;
-		qDebug() << "[StatSniffling] avgOdd : " << avgOdd << ", avgEven : " << avgEven;
+		//qDebug() << "[StatSniffling] avgOdd : " << avgOdd << ", avgEven : " << avgEven;
 
 		// 구할 홀수 개수와 전체 홀수 개수를 비교하여 제일 작은 값으로 설정
 		countOdd = qMin(countOdd, (baseList.count() - 5) * avgOdd / 100);
 		countEvent = qMin(countEvent, (baseList.count() - 5) * avgEven / 100);
-		qDebug() << "[StatSniffling] countOdd : " << countOdd << ", countEvent : " << countEvent;
+		//qDebug() << "[StatSniffling] countOdd : " << countOdd << ", countEvent : " << countEvent;
 		for (QList<int>::const_iterator iter = baseList.constBegin(); iter != baseList.constEnd(); ++iter) {
 	
 			if (countOdd <= 0 && countEvent <= 0) break;

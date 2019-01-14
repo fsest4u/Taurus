@@ -74,7 +74,7 @@ bool MgrLotto::GenerateInfo(QList<bool> condition, QMap<int, QList<int>> srcData
 			return false;
 		}
 		for (QList<int>::const_iterator iter = m_BaseList.cbegin(); iter != m_BaseList.constEnd(); ++iter) {
-			qDebug() << "[CON_NUMBER] " << *iter;
+			//qDebug() << "[CON_NUMBER] " << *iter;
 		}
 	}
 	// 순차적으로 설정
@@ -95,7 +95,7 @@ bool MgrLotto::GenerateInfo(QList<bool> condition, QMap<int, QList<int>> srcData
 			return false;
 		}
 		for (QList<int>::const_iterator iter = m_BaseList.cbegin(); iter != m_BaseList.constEnd(); ++iter) {
-			qDebug() << "[CON_COLOR] " << *iter;
+			//qDebug() << "[CON_COLOR] " << *iter;
 		}
 	}
 	// 순차적으로 설정
@@ -116,7 +116,7 @@ bool MgrLotto::GenerateInfo(QList<bool> condition, QMap<int, QList<int>> srcData
 			return false;
 		}
 		for (QList<int>::const_iterator iter = m_BaseList.cbegin(); iter != m_BaseList.constEnd(); ++iter) {
-			qDebug() << "[CON_SECTION] " << *iter;
+			//qDebug() << "[CON_SECTION] " << *iter;
 		}
 	}
 	// 순차적으로 설정
@@ -137,7 +137,7 @@ bool MgrLotto::GenerateInfo(QList<bool> condition, QMap<int, QList<int>> srcData
 			return false;
 		}
 		for (QList<int>::const_iterator iter = m_BaseList.cbegin(); iter != m_BaseList.constEnd(); ++iter) {
-			qDebug() << "[CON_SNIFFLING] " << *iter;
+			//qDebug() << "[CON_SNIFFLING] " << *iter;
 		}
 	}
 	// 랜덤하게 설정
@@ -148,7 +148,7 @@ bool MgrLotto::GenerateInfo(QList<bool> condition, QMap<int, QList<int>> srcData
 		period.Generate(srcData, true, m_LastWeek);
 		m_PeriodList = period.GetListRandom();
 		// for debug
-		qDebug() << "=== CON_PERIOD count " << m_PeriodList.count();
+		qDebug() << "[CON_PERIOD] count " << m_PeriodList.count();
 		if (m_PeriodList.count() <= 0) {
 			m_ProgressWidget->Accept();
 			QMessageBox::warning(this
@@ -158,7 +158,7 @@ bool MgrLotto::GenerateInfo(QList<bool> condition, QMap<int, QList<int>> srcData
 			return false;
 		}
 		for (QList<int>::const_iterator iter = m_PeriodList.cbegin(); iter != m_PeriodList.constEnd(); ++iter) {
-			qDebug() << "=== CON_PERIOD " << *iter;
+			//qDebug() << "=== CON_PERIOD " << *iter;
 		}
 	}
 	// todo
@@ -177,7 +177,7 @@ bool MgrLotto::GenerateInfo(QList<bool> condition, QMap<int, QList<int>> srcData
 
 QList<int> MgrLotto::ExportData()
 {
-	qDebug() << "ExportData()";
+	//qDebug() << "ExportData()";
 
 	//QList<int> tempList = m_BaseList + m_PeriodList;
 	QList<int> tempList;
@@ -194,7 +194,7 @@ QList<int> MgrLotto::ExportData()
 	// for debug
 	qDebug() << "[TEMP_LIST] count : " << tempList.count();
 	for (QList<int>::const_iterator iter = tempList.cbegin(); iter != tempList.constEnd(); ++iter) {
-		qDebug() << "[TEMP_LIST] " << *iter;
+		//qDebug() << "[TEMP_LIST] " << *iter;
 	}
 
 	m_LottoList.clear();

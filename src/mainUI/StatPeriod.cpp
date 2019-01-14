@@ -28,7 +28,7 @@ StatPeriod::~StatPeriod()
 
 void StatPeriod::Generate(QMap<int, QList<int>> srcData, bool bBonus, int lastweek)
 {
-	qDebug() << "StatPeriod::Generate()";
+	//qDebug() << "StatPeriod::Generate()";
 	m_Stat1.clear();
 	for (int i = 1; i < (45 + 1); i++) {
 		m_Stat1.insert(i, true);
@@ -54,7 +54,7 @@ void StatPeriod::Generate(QMap<int, QList<int>> srcData, bool bBonus, int lastwe
 	while (iterator2.hasNext()) {
 		iterator2.next();
 		if (iterator2.value()) {
-			qDebug() << "[StatPeriod] Number : " << iterator2.key() << ", Not appearing : " << iterator2.value();
+			//qDebug() << "[StatPeriod] Number : " << iterator2.key() << ", Not appearing : " << iterator2.value();
 		}
 	}
 

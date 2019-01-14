@@ -27,7 +27,7 @@ StatSection::~StatSection()
 
 void StatSection::Generate(QMap<int, QList<int>> srcData, bool bBonus, int lastweek)
 {
-	qDebug() << "StatSection::Generate()";
+	//qDebug() << "StatSection::Generate()";
 	m_Stat3.clear();
 	int turn = 0;
 
@@ -60,7 +60,7 @@ void StatSection::Generate(QMap<int, QList<int>> srcData, bool bBonus, int lastw
 	}
 
 	// for debug
-	qDebug() << "=======================";
+	//qDebug() << "=======================";
 	int amount = m_Stat3.count();
 
 	QList<int> keys = m_Stat3.uniqueKeys();
@@ -76,7 +76,7 @@ void StatSection::Generate(QMap<int, QList<int>> srcData, bool bBonus, int lastw
 		iterator2.previous();
 
 		int avg = iterator2.key() * 100 / amount;
-		qDebug() << "[StatSection] Win : " << iterator2.key() << ", Number Area : " << iterator2.value() << ", percent : " << avg;
+		//qDebug() << "[StatSection] Win : " << iterator2.key() << ", Number Area : " << iterator2.value() << ", percent : " << avg;
 	}
 
 }QList<int> StatSection::GetList(QList<int> baseList)

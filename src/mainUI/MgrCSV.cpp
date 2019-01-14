@@ -71,6 +71,6 @@ bool MgrCSV::ReadFile(QString filepath, bool bBonus)
 
 void MgrCSV::WriteFile(QString filepath)
 {
-	qDebug() << "[WriteFile]-----------------------------";
+	//qDebug() << "[WriteFile]-----------------------------";
 
 }

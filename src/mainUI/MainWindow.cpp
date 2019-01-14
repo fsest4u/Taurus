@@ -149,22 +149,22 @@ void MainWindow::InitUI()
 
 void MainWindow::on_actionNew_triggered()
 {
-	qDebug() << "on_actionNew_triggered()";
+	//qDebug() << "on_actionNew_triggered()";
 }
 
 void MainWindow::on_actionOpen_triggered()
 {
-	qDebug() << "on_actionOpen_triggered()";
+	//qDebug() << "on_actionOpen_triggered()";
 }
 
 void MainWindow::on_actionSave_triggered()
 {
-	qDebug() << "on_actionSave_triggered()";
+	//qDebug() << "on_actionSave_triggered()";
 }
 
 void MainWindow::on_actionExit_triggered()
 {
-	qDebug() << "on_actionExit_triggered()";
+	//qDebug() << "on_actionExit_triggered()";
 	QMessageBox::StandardButton btn;
 	btn = QMessageBox::question(this, tr(QCoreApplication::applicationName().toStdString().c_str()), tr("Are you sure you want to exit the application?"), QMessageBox::Ok | QMessageBox::Cancel);
 
@@ -176,7 +176,7 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::on_actionAbout_triggered()
 {
-	qDebug() << "on_actionAbout_triggered()";
+	//qDebug() << "on_actionAbout_triggered()";
 	QMessageBox::information(this
 		, tr(QCoreApplication::applicationName().toStdString().c_str())
 		, tr("%1 %2").arg(QCoreApplication::applicationName())
@@ -247,7 +247,7 @@ void MainWindow::ConnectSignalsToSlots()
 
 void MainWindow::SetStartTurn(int index)
 {
-	qDebug() << "SetStartTurn() end current " << ui->cbEnd->currentIndex() << ", start index " << index;
+	//qDebug() << "SetStartTurn() end current " << ui->cbEnd->currentIndex() << ", start index " << index;
 	if (ui->cbEnd->currentIndex() < index) {
 		ui->cbEnd->setCurrentIndex(index);
 	}
@@ -255,7 +255,7 @@ void MainWindow::SetStartTurn(int index)
 
 void MainWindow::SetEndTurn(int index)
 {
-	qDebug() << "SetEndTurn() start current " << ui->cbStart->currentIndex() << ", end index " << index;
+	//qDebug() << "SetEndTurn() start current " << ui->cbStart->currentIndex() << ", end index " << index;
 	if (ui->cbStart->currentIndex() > index) {
 		ui->cbStart->setCurrentIndex(index);
 	}
@@ -264,7 +264,7 @@ void MainWindow::SetEndTurn(int index)
 
 void MainWindow::Analyze()
 {
-	qDebug() << "Analyze()";
+	//qDebug() << "Analyze()";
 	if (ui->dataFilepath->text().isEmpty()) {
 		QMessageBox::warning(this
 			, tr(QCoreApplication::applicationName().toStdString().c_str())

@@ -26,7 +26,7 @@ StatContinue::~StatContinue()
 
 void StatContinue::Generate(QMap<int, QList<int>> srcData, bool bBonus, int start, int end)
 {
-	qDebug() << "StatContinue::Generate()";
+	//qDebug() << "StatContinue::Generate()";
 	m_Stat1.clear();
 
 	QMapIterator<int, QList<int>> iterator1(srcData);
@@ -64,13 +64,13 @@ void StatContinue::Generate(QMap<int, QList<int>> srcData, bool bBonus, int star
 	// for debug
 	QList<int> keys1 = m_Stat1.uniqueKeys();
 	for (QList<int>::const_iterator iter = keys1.cbegin(); iter != keys1.constEnd(); ++iter) {
-		qDebug() << "[StatContinue] Turn : " << *iter << ", Pair : " << m_Stat1.values(*iter).count();
+		//qDebug() << "[StatContinue] Turn : " << *iter << ", Pair : " << m_Stat1.values(*iter).count();
 		m_Stat2.insertMulti(m_Stat1.values(*iter).count(), 1);
 	}
 
 	QList<int> keys2 = m_Stat2.uniqueKeys();
 	for (QList<int>::const_iterator iter = keys2.cbegin(); iter != keys2.constEnd(); ++iter) {
-		qDebug() << "[StatContinue] Pair : " << *iter << ", Win : " << m_Stat2.values(*iter).count();
+		//qDebug() << "[StatContinue] Pair : " << *iter << ", Win : " << m_Stat2.values(*iter).count();
 		m_Stat3.insertMulti(m_Stat2.values(*iter).count(), *iter);
 	}
 
@@ -78,7 +78,7 @@ void StatContinue::Generate(QMap<int, QList<int>> srcData, bool bBonus, int star
 	iterator2.toBack();
 	while (iterator2.hasPrevious()) {
 		iterator2.previous();
-		qDebug() << "[StatContinue] Win : " << iterator2.key() << ", Pair : " << iterator2.value();
+		//qDebug() << "[StatContinue] Win : " << iterator2.key() << ", Pair : " << iterator2.value();
 	}
 
 }

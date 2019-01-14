@@ -28,7 +28,7 @@ StatNumber::~StatNumber()
 
 void StatNumber::Generate(QMap<int, QList<int>> srcData, bool bBonus, int start, int end)
 {
-	qDebug() << "StatNumber::Generate()";
+	//qDebug() << "StatNumber::Generate()";
 	m_Stat1.clear();
 	m_Stat2.clear();
 
