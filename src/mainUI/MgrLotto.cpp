@@ -66,6 +66,7 @@ bool MgrLotto::GenerateInfo(QList<bool> condition, QMap<int, QList<int>> srcData
 		// for debug
 		qDebug() << "[CON_NUMBER] count : " << m_BaseList.count();
 		if (m_BaseList.count() <= 0) {
+			m_ProgressWidget->Accept();
 			QMessageBox::warning(this
 				, tr(QCoreApplication::applicationName().toStdString().c_str())
 				, tr("Please, Retry to analyze. (Not enough data, CON_NUMBER)"));
@@ -106,6 +107,7 @@ bool MgrLotto::GenerateInfo(QList<bool> condition, QMap<int, QList<int>> srcData
 		// for debug
 		qDebug() << "[CON_SECTION] count : " << m_BaseList.count();
 		if (m_BaseList.count() <= 0) {
+			m_ProgressWidget->Accept();
 			QMessageBox::warning(this
 				, tr(QCoreApplication::applicationName().toStdString().c_str())
 				, tr("Please, Retry to analyze. (Not enough data, CON_SECTION)"));
@@ -126,6 +128,7 @@ bool MgrLotto::GenerateInfo(QList<bool> condition, QMap<int, QList<int>> srcData
 		// for debug
 		qDebug() << "[CON_SNIFFLING] count : " << m_BaseList.count();
 		if (m_BaseList.count() <= 0) {
+			m_ProgressWidget->Accept();
 			QMessageBox::warning(this
 				, tr(QCoreApplication::applicationName().toStdString().c_str())
 				, tr("Please, Retry to analyze. (Not enough data, CON_SNIFFLING)"));
@@ -146,6 +149,7 @@ bool MgrLotto::GenerateInfo(QList<bool> condition, QMap<int, QList<int>> srcData
 		// for debug
 		qDebug() << "=== CON_PERIOD count " << m_PeriodList.count();
 		if (m_PeriodList.count() <= 0) {
+			m_ProgressWidget->Accept();
 			QMessageBox::warning(this
 				, tr(QCoreApplication::applicationName().toStdString().c_str())
 				, tr("Please, Retry to analyze. (Not enough data, CON_PERIOD)"));
