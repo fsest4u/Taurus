@@ -45,6 +45,11 @@ private slots:
 	void SetEndTurn(int index);
 	void Analyze();
 
+	void ExportGame1();
+	void ExportGame2();
+	void ExportGame3();
+	void ExportGame4();
+	void ExportGame5();
 
 private:
 	/**

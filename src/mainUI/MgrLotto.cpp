@@ -157,12 +157,12 @@ bool MgrLotto::GenerateInfo(QList<bool> condition, QMap<int, QList<int>> srcData
 		}
 	}
 	// todo
-	if (condition.at(CON_COUTINUE)) {
+	//if (condition.at(CON_COUTINUE)) {
 
-		StatContinue conti;
-		conti.Generate(srcData, false, m_StartTurn, m_EndTurn);
-		conti.GetList();
-	}
+	//	StatContinue conti;
+	//	conti.Generate(srcData, false, m_StartTurn, m_EndTurn);
+	//	conti.GetList();
+	//}
 	m_ProgressWidget->Accept();
 
 	QApplication::restoreOverrideCursor();

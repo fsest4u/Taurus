@@ -25,7 +25,7 @@
 
 static const QString SETTINGS_GROUP = "mainWindow";
 
-const int REMAIN_COUNT = 20;
+const int REMAIN_COUNT = 4;
 
 const int TURN_COUNT = 20;
 
@@ -78,13 +78,13 @@ void MainWindow::ReadSettings()
 	m_WeekNumber = settings.value("weeknumber", QDate::currentDate().weekNumber()).toByteArray().toInt();
 	m_RemainCount = settings.value("count", REMAIN_COUNT).toByteArray().toInt();
 
-	ui->rbBonusOn->setChecked(settings.value("bbonus", false).toBool());
+	ui->rbBonusOn->setChecked(settings.value("bbonus", true).toBool());
 	ui->rbBonusOff->setChecked(!settings.value("bbonus", false).toBool());
-	ui->cbNumber->setChecked(settings.value("bnumber", false).toBool());
-	ui->cbColor->setChecked(settings.value("bcolor", false).toBool());
-	ui->cbSection->setChecked(settings.value("bsection", false).toBool());
-	ui->cbPeriod->setChecked(settings.value("bperiod", false).toBool());
-	ui->cbSniffling->setChecked(settings.value("bsniffling", false).toBool());
+	ui->cbNumber->setChecked(settings.value("bnumber", true).toBool());
+	ui->cbColor->setChecked(settings.value("bcolor", true).toBool());
+	ui->cbSection->setChecked(settings.value("bsection", true).toBool());
+	ui->cbPeriod->setChecked(settings.value("bperiod", true).toBool());
+	ui->cbSniffling->setChecked(settings.value("bsniffling", true).toBool());
 	ui->cbContinue->setChecked(settings.value("bcontinue", false).toBool());
 
 	settings.endGroup();
@@ -126,16 +126,6 @@ void MainWindow::InitUI()
 	ui->actionSave->setVisible(false);
 
 	ui->dataFilepath->setText("");
-
-	ui->cbNumber->setVisible(false);
-	ui->cbContinue->setVisible(false);
-
-	ui->cbNumber->setChecked(true);
-	ui->cbColor->setChecked(true);
-	ui->cbSection->setChecked(true);
-	ui->cbPeriod->setChecked(true);
-	ui->cbSniffling->setChecked(true);
-	ui->cbContinue->setChecked(true);
 
 	ui->cbLastWeek->addItem(tr("5 Week"), MgrLotto::TURN_WEEK_5);
 	ui->cbLastWeek->addItem(tr("10 Week"), MgrLotto::TURN_WEEK_10);
@@ -303,6 +293,16 @@ void MainWindow::Analyze()
 						, ui->cbEnd->currentData().toInt()
 						, ui->cbLastWeek->currentData().toInt());
 
+	ExportGame1();
+	ExportGame2();
+	ExportGame3();
+	ExportGame4();
+	ExportGame5();
+
+}
+
+void MainWindow::ExportGame1()
+{
 	QList<bool> condition;
 	condition.insert(0, ui->cbNumber->isChecked());
 	condition.insert(1, ui->cbColor->isChecked());
@@ -310,6 +310,7 @@ void MainWindow::Analyze()
 	condition.insert(3, ui->cbPeriod->isChecked());
 	condition.insert(4, ui->cbSniffling->isChecked());
 	condition.insert(5, ui->cbContinue->isChecked());
+
 	bool ret1 = m_Lotto->GenerateInfo(condition, m_SrcData);
 	if (!ret1) {
 		QMessageBox::warning(this
@@ -343,8 +344,128 @@ void MainWindow::Analyze()
 	//		, tr(QCoreApplication::applicationName().toStdString().c_str())
 	//		, tr("Congratulations. The %1 th").arg(keys.at(0)));
 	//}
+}
+
+void MainWindow::ExportGame2()
+{
+	QList<bool> condition;
+	condition.insert(0, ui->cbNumber->isChecked());
+	condition.insert(1, ui->cbColor->isChecked());
+	condition.insert(2, ui->cbSection->isChecked());
+	condition.insert(3, ui->cbPeriod->isChecked());
+	condition.insert(4, ui->cbSniffling->isChecked());
+	condition.insert(5, ui->cbContinue->isChecked());
+
+	bool ret1 = m_Lotto->GenerateInfo(condition, m_SrcData);
+	if (!ret1) {
+		QMessageBox::warning(this
+			, tr(QCoreApplication::applicationName().toStdString().c_str())
+			, tr("Please, Change to analysis conditions."));
+		return;
+	}
+
+	QList<int> lotto = m_Lotto->ExportData();
+
+	ui->lotto0_2->setText(QString::number(lotto.at(0)));
+	ui->lotto1_2->setText(QString::number(lotto.at(1)));
+	ui->lotto2_2->setText(QString::number(lotto.at(2)));
+	ui->lotto3_2->setText(QString::number(lotto.at(3)));
+	ui->lotto4_2->setText(QString::number(lotto.at(4)));
+	ui->lotto5_2->setText(QString::number(lotto.at(5)));
 
 }
+
+
+void MainWindow::ExportGame3()
+{
+	QList<bool> condition;
+	condition.insert(0, ui->cbNumber->isChecked());
+	condition.insert(1, ui->cbColor->isChecked());
+	condition.insert(2, ui->cbSection->isChecked());
+	condition.insert(3, ui->cbPeriod->isChecked());
+	condition.insert(4, ui->cbSniffling->isChecked());
+	condition.insert(5, ui->cbContinue->isChecked());
+
+	bool ret1 = m_Lotto->GenerateInfo(condition, m_SrcData);
+	if (!ret1) {
+		QMessageBox::warning(this
+			, tr(QCoreApplication::applicationName().toStdString().c_str())
+			, tr("Please, Change to analysis conditions."));
+		return;
+	}
+
+	QList<int> lotto = m_Lotto->ExportData();
+
+	ui->lotto0_3->setText(QString::number(lotto.at(0)));
+	ui->lotto1_3->setText(QString::number(lotto.at(1)));
+	ui->lotto2_3->setText(QString::number(lotto.at(2)));
+	ui->lotto3_3->setText(QString::number(lotto.at(3)));
+	ui->lotto4_3->setText(QString::number(lotto.at(4)));
+	ui->lotto5_3->setText(QString::number(lotto.at(5)));
+
+}
+
+
+void MainWindow::ExportGame4()
+{
+	QList<bool> condition;
+	condition.insert(0, ui->cbNumber->isChecked());
+	condition.insert(1, ui->cbColor->isChecked());
+	condition.insert(2, ui->cbSection->isChecked());
+	condition.insert(3, ui->cbPeriod->isChecked());
+	condition.insert(4, ui->cbSniffling->isChecked());
+	condition.insert(5, ui->cbContinue->isChecked());
+
+	bool ret1 = m_Lotto->GenerateInfo(condition, m_SrcData);
+	if (!ret1) {
+		QMessageBox::warning(this
+			, tr(QCoreApplication::applicationName().toStdString().c_str())
+			, tr("Please, Change to analysis conditions."));
+		return;
+	}
+
+	QList<int> lotto = m_Lotto->ExportData();
+
+	ui->lotto0_4->setText(QString::number(lotto.at(0)));
+	ui->lotto1_4->setText(QString::number(lotto.at(1)));
+	ui->lotto2_4->setText(QString::number(lotto.at(2)));
+	ui->lotto3_4->setText(QString::number(lotto.at(3)));
+	ui->lotto4_4->setText(QString::number(lotto.at(4)));
+	ui->lotto5_4->setText(QString::number(lotto.at(5)));
+
+}
+
+
+void MainWindow::ExportGame5()
+{
+	QList<bool> condition;
+	condition.insert(0, ui->cbNumber->isChecked());
+	condition.insert(1, ui->cbColor->isChecked());
+	condition.insert(2, ui->cbSection->isChecked());
+	condition.insert(3, ui->cbPeriod->isChecked());
+	condition.insert(4, ui->cbSniffling->isChecked());
+	condition.insert(5, ui->cbContinue->isChecked());
+
+	bool ret1 = m_Lotto->GenerateInfo(condition, m_SrcData);
+	if (!ret1) {
+		QMessageBox::warning(this
+			, tr(QCoreApplication::applicationName().toStdString().c_str())
+			, tr("Please, Change to analysis conditions."));
+		return;
+	}
+
+	QList<int> lotto = m_Lotto->ExportData();
+
+	ui->lotto0_5->setText(QString::number(lotto.at(0)));
+	ui->lotto1_5->setText(QString::number(lotto.at(1)));
+	ui->lotto2_5->setText(QString::number(lotto.at(2)));
+	ui->lotto3_5->setText(QString::number(lotto.at(3)));
+	ui->lotto4_5->setText(QString::number(lotto.at(4)));
+	ui->lotto5_5->setText(QString::number(lotto.at(5)));
+
+}
+
+
 
 bool MainWindow::OnCheckLimited()
 {
