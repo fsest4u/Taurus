@@ -87,6 +87,7 @@ bool MgrLotto::GenerateInfo(QList<bool> condition, QMap<int, QList<int>> srcData
 		// for debug
 		qDebug() << "[CON_COLOR] count : " << m_BaseList.count();
 		if (m_BaseList.count() <= 0) {
+			m_ProgressWidget->Accept();
 			QMessageBox::warning(this
 				, tr(QCoreApplication::applicationName().toStdString().c_str())
 				, tr("Please, Retry to analyze. (Not enough data, CON_COLOR)"));
@@ -118,13 +119,13 @@ bool MgrLotto::GenerateInfo(QList<bool> condition, QMap<int, QList<int>> srcData
 			qDebug() << "[CON_SECTION] " << *iter;
 		}
 	}
-	// 랜덤하게 설정
+	// 순차적으로 설정
 	if (condition.at(CON_SNIFFLING)) {
 		m_ProgressWidget->SetValue(CON_PERIOD, CON_COUTINUE, QString("period"));
 
 		StatSniffling sniffling;
 		sniffling.Generate(srcData, false, m_StartTurn, m_EndTurn);
-		m_BaseList = sniffling.GetListRandom(m_BaseList);
+		m_BaseList = sniffling.GetList(m_BaseList);
 		// for debug
 		qDebug() << "[CON_SNIFFLING] count : " << m_BaseList.count();
 		if (m_BaseList.count() <= 0) {

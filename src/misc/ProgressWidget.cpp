@@ -15,7 +15,7 @@
 #include "ProgressWidget.h"
 //#include "gemini_constants.h"
 
-const int TEMP_COUNT = 2000;
+const int TEMP_COUNT = 500;
 
 ProgressWidget::ProgressWidget() :
 	m_Progress(NULL)

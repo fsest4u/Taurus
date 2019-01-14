@@ -32,6 +32,9 @@ public:
 	QList<int> GetList(QList<int> baseList);
 	QList<int> GetListRandom(QList<int> baseList);
 
+	//void Generate_Old(QMap<int, QList<int>> srcData, bool bBonus = false, int start = 1, int end = 1);
+	//QList<int> GetList_Old(QList<int> baseList);
+	//QList<int> GetListRandom_Old(QList<int> baseList);
 
 
 private slots:
